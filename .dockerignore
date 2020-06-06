@@ -1,3 +1,4 @@
 /vendor
 /.git
 /dist
+/awscdk/pipeline/cdk.out/

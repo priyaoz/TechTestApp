@@ -88,6 +88,21 @@
   version = "v1.2.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:4c25f09f6cb59e3d8ad5a16f89822dc52c6f4ecb3c048f3c1e83d7f1134740f7"
+  name = "github.com/servian/TechTestApp"
+  packages = [
+    "cmd",
+    "config",
+    "daemon",
+    "db",
+    "model",
+    "ui",
+  ]
+  pruneopts = "UT"
+  revision = "0e2a5473e0e997c5ae29a7189b73111ac1bdd076"
+
+[[projects]]
   digest = "1:bd1ae00087d17c5a748660b8e89e1043e1e5479d0fea743352cda2f8dd8c4f84"
   name = "github.com/spf13/afero"
   packages = [
@@ -175,6 +190,12 @@
   input-imports = [
     "github.com/gorilla/mux",
     "github.com/lib/pq",
+    "github.com/servian/TechTestApp/cmd",
+    "github.com/servian/TechTestApp/config",
+    "github.com/servian/TechTestApp/daemon",
+    "github.com/servian/TechTestApp/db",
+    "github.com/servian/TechTestApp/model",
+    "github.com/servian/TechTestApp/ui",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
   ]
