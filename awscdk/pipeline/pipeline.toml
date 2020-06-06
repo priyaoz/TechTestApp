@@ -1,9 +1,9 @@
 [codepipeline]
 region = 'ap-southeast-2'
 accountname = 'centauridau-mike'
-account = '102460195799'
+accountid = '102460195799'
 githubtokenname = 'GithubToken-5jhXVl'
 githubtokenkey = 'github-oauth-token'
-repoowner = 'Marakai'
-reponame = 'TechTestApp'
-buildbranch = 'develop'
+githubrepoowner = 'Marakai'
+githubreponame = 'TechTestApp'
+buildbranch = 'feature/codebuildspec'

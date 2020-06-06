@@ -21,6 +21,8 @@ setuptools.setup(
     install_requires=[
         "aws-cdk.core",
         "aws-cdk.aws-iam",
+        "aws-cdk.aws-ecr",
+        "aws-cdk.aws-codebuild",
         "aws-cdk.aws-codepipeline",
         "aws-cdk.aws-codepipeline-actions",
         "PyYAML",
