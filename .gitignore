@@ -25,7 +25,5 @@ TechTestApp
 
 # Jetbrains stuff
 .idea/
-**/cdk.out/
 /awscdk/pipeline/techtestapp_pipeline/techtestapp_pipeline.egg-info/
 **/__pycache__/
-!/awscdk/pipeline/cdk.out/
