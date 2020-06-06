@@ -1,0 +1,358 @@
+{
+  "version": "1.33.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "TTAPipeline": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://102460195799/ap-southeast-2",
+      "properties": {
+        "templateFile": "TTAPipeline.template.json"
+      },
+      "metadata": {
+        "/TTAPipeline/TTAPipeline/ArtifactsBucketEncryptionKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+            "trace": [
+              "new Key (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-kms/lib/key.js:155:26)",
+              "new Pipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:80:35)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAPipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineArtifactsBucket69AD77DA",
+            "trace": [
+              "new Bucket (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-s3/lib/bucket.js:366:26)",
+              "new Pipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:85:27)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAPipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineArtifactsBucketEncryptionKeyAlias62D430E8",
+            "trace": [
+              "new Alias (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-kms/lib/alias.js:69:26)",
+              "new Pipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:93:13)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAPipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineRole198F0063",
+            "trace": [
+              "new Role (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/role.js:41:22)",
+              "new Pipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:101:35)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAPipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineRoleDefaultPolicy70BF59DE",
+            "trace": [
+              "new Policy (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/policy.js:30:26)",
+              "Role.addToPolicy (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/role.js:161:34)",
+              "Function.addToPrincipal (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/grant.js:57:65)",
+              "Function.addToPrincipalOrResource (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/grant.js:31:30)",
+              "Bucket.grant (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-s3/lib/bucket.js:275:29)",
+              "Bucket.grantReadWrite (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-s3/lib/bucket.js:224:21)",
+              "new Pipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:114:29)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAPipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineE1AE0FDF",
+            "trace": [
+              "new Pipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:104:30)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAPipeline/TTASource/Github_Source/WebhookResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineTTASourceGithubSourceWebhookResourceDE367564",
+            "trace": [
+              "GitHubSourceAction.bound (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline-actions/lib/github/source-action.js:44:13)",
+              "GitHubSourceAction.bind (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline-actions/lib/action.js:46:21)",
+              "Pipeline._attachActionToPipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:213:37)",
+              "Stage.attachActionToPipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:109:31)",
+              "Stage.addAction (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:68:33)",
+              "new Stage (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:25:18)",
+              "Pipeline.addStage (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:161:23)",
+              "_wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7663:51)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "ret._ensureSync (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7663:25)",
+              "Kernel._ensureSync (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8272:20)",
+              "Kernel.invoke (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7662:26)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAPipeline/TTABuild/CDK_Build/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F",
+            "trace": [
+              "new Role (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/role.js:41:22)",
+              "Pipeline.getRoleForAction (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:351:26)",
+              "Pipeline._attachActionToPipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:209:33)",
+              "Stage.attachActionToPipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:109:31)",
+              "Stage.addAction (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:68:33)",
+              "new Stage (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:25:18)",
+              "Pipeline.addStage (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:161:23)",
+              "_wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7663:51)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "ret._ensureSync (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7663:25)",
+              "Kernel._ensureSync (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8272:20)",
+              "Kernel.invoke (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7662:26)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAPipeline/TTABuild/CDK_Build/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleDefaultPolicyBEA4B3C1",
+            "trace": [
+              "new Policy (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/policy.js:30:26)",
+              "Role.addToPolicy (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/role.js:161:34)",
+              "CodeBuildAction.bound (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline-actions/lib/codebuild/build-action.js:67:22)",
+              "CodeBuildAction.bind (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline-actions/lib/action.js:46:21)",
+              "Pipeline._attachActionToPipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:213:37)",
+              "Stage.attachActionToPipeline (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:109:31)",
+              "Stage.addAction (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:68:33)",
+              "new Stage (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/stage.js:25:18)",
+              "Pipeline.addStage (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codepipeline/lib/pipeline.js:161:23)",
+              "_wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7663:51)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "ret._ensureSync (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7663:25)",
+              "Kernel._ensureSync (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8272:20)",
+              "Kernel.invoke (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7662:26)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTABuild/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTABuildRole34841392",
+            "trace": [
+              "new Role (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/role.js:41:22)",
+              "new Project (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codebuild/lib/project.js:238:35)",
+              "new PipelineProject (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codebuild/lib/pipeline-project.js:11:9)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTABuild/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTABuildRoleDefaultPolicy3C7AA034",
+            "trace": [
+              "new Policy (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/policy.js:30:26)",
+              "Role.addToPolicy (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-iam/lib/role.js:161:34)",
+              "PipelineProject.addToRolePolicy (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codebuild/lib/project.js:46:23)",
+              "new Project (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codebuild/lib/project.js:310:14)",
+              "new PipelineProject (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codebuild/lib/pipeline-project.js:11:9)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTABuild/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTABuild3ED2D02B",
+            "trace": [
+              "new Project (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codebuild/lib/project.js:280:26)",
+              "new PipelineProject (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-codebuild/lib/pipeline-project.js:11:9)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ],
+        "/TTAPipeline/TTAECR/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TTAECR286888F6",
+            "trace": [
+              "new Repository (/tmp/jsii-kernel-Qh8C4v/node_modules/@aws-cdk/aws-ecr/lib/repository.js:156:26)",
+              "obj._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:49)",
+              "Kernel._wrapSandboxCode (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8296:20)",
+              "Kernel._create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7836:26)",
+              "Kernel.create (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7583:21)",
+              "KernelHost.processRequest (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7371:28)",
+              "KernelHost.run (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7311:14)",
+              "Immediate.setImmediate [as _onImmediate] (/home/michaelh/.local/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7314:37)",
+              "runCallback (timers.js:705:18)",
+              "tryOnImmediate (timers.js:676:5)",
+              "processImmediate (timers.js:658:5)"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "runtime": {
+    "libraries": {
+      "@aws-cdk/cloud-assembly-schema": "1.37.0",
+      "@aws-cdk/cx-api": "1.37.0",
+      "@aws-cdk/core": "1.37.0",
+      "@aws-cdk/assets": "1.37.0",
+      "@aws-cdk/region-info": "1.37.0",
+      "@aws-cdk/aws-iam": "1.37.0",
+      "@aws-cdk/aws-cloudwatch": "1.37.0",
+      "@aws-cdk/aws-events": "1.37.0",
+      "@aws-cdk/aws-codecommit": "1.37.0",
+      "@aws-cdk/aws-logs": "1.37.0",
+      "@aws-cdk/aws-kms": "1.37.0",
+      "@aws-cdk/aws-s3": "1.37.0",
+      "@aws-cdk/aws-ssm": "1.37.0",
+      "@aws-cdk/aws-ec2": "1.37.0",
+      "@aws-cdk/aws-s3-assets": "1.37.0",
+      "@aws-cdk/aws-sqs": "1.37.0",
+      "@aws-cdk/aws-lambda": "1.37.0",
+      "@aws-cdk/aws-sns": "1.37.0",
+      "@aws-cdk/aws-cloudformation": "1.37.0",
+      "@aws-cdk/custom-resources": "1.37.0",
+      "@aws-cdk/aws-ecr": "1.37.0",
+      "@aws-cdk/aws-ecr-assets": "1.37.0",
+      "@aws-cdk/aws-sam": "1.37.0",
+      "@aws-cdk/aws-secretsmanager": "1.37.0",
+      "@aws-cdk/aws-codebuild": "1.37.0",
+      "@aws-cdk/aws-autoscaling-common": "1.37.0",
+      "@aws-cdk/aws-elasticloadbalancing": "1.37.0",
+      "@aws-cdk/aws-route53": "1.37.0",
+      "@aws-cdk/aws-certificatemanager": "1.37.0",
+      "@aws-cdk/aws-elasticloadbalancingv2": "1.37.0",
+      "@aws-cdk/aws-autoscaling": "1.37.0",
+      "@aws-cdk/aws-codedeploy": "1.37.0",
+      "@aws-cdk/aws-codepipeline": "1.37.0",
+      "@aws-cdk/aws-applicationautoscaling": "1.37.0",
+      "@aws-cdk/aws-sns-subscriptions": "1.37.0",
+      "@aws-cdk/aws-autoscaling-hooktargets": "1.37.0",
+      "@aws-cdk/aws-apigateway": "1.37.0",
+      "@aws-cdk/aws-cloudfront": "1.37.0",
+      "@aws-cdk/aws-cognito": "1.37.0",
+      "@aws-cdk/aws-route53-targets": "1.37.0",
+      "@aws-cdk/aws-servicediscovery": "1.37.0",
+      "@aws-cdk/aws-ecs": "1.37.0",
+      "@aws-cdk/aws-batch": "1.37.0",
+      "@aws-cdk/aws-stepfunctions": "1.37.0",
+      "@aws-cdk/aws-events-targets": "1.37.0",
+      "@aws-cdk/aws-codepipeline-actions": "1.37.0",
+      "jsii-runtime": "Python/3.6.8"
+    }
+  }
+}

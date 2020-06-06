@@ -1,0 +1,687 @@
+{
+  "Resources": {
+    "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::102460195799:root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "TTAPipelineRole198F0063",
+                    "Arn"
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "TTABuildRole34841392",
+                    "Arn"
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "TTABuildRole34841392",
+                    "Arn"
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/ArtifactsBucketEncryptionKey/Resource"
+      }
+    },
+    "TTAPipelineArtifactsBucket69AD77DA": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/ArtifactsBucket/Resource"
+      }
+    },
+    "TTAPipelineArtifactsBucketEncryptionKeyAlias62D430E8": {
+      "Type": "AWS::KMS::Alias",
+      "Properties": {
+        "AliasName": "alias/codepipeline-ttapipelinea21ace39",
+        "TargetKeyId": {
+          "Fn::GetAtt": [
+            "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+            "Arn"
+          ]
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/ArtifactsBucketEncryptionKeyAlias/Resource"
+      }
+    },
+    "TTAPipelineRole198F0063": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/Role/Resource"
+      }
+    },
+    "TTAPipelineRoleDefaultPolicy70BF59DE": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TTAPipelineArtifactsBucket69AD77DA",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TTAPipelineArtifactsBucket69AD77DA",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "TTAPipelineRoleDefaultPolicy70BF59DE",
+        "Roles": [
+          {
+            "Ref": "TTAPipelineRole198F0063"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/Role/DefaultPolicy/Resource"
+      }
+    },
+    "TTAPipelineE1AE0FDF": {
+      "Type": "AWS::CodePipeline::Pipeline",
+      "Properties": {
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "TTAPipelineRole198F0063",
+            "Arn"
+          ]
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "ThirdParty",
+                  "Provider": "GitHub",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "Owner": "Marakai",
+                  "Repo": "TechTestApp",
+                  "Branch": "feature/codebuildspec",
+                  "OAuthToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:github-oauth-token:SecretString:github-oauth-token::}}",
+                  "PollForSourceChanges": false
+                },
+                "Name": "Github_Source",
+                "OutputArtifacts": [
+                  {
+                    "Name": "Artifact_TTASource_Github_Source"
+                  }
+                ],
+                "RunOrder": 1
+              }
+            ],
+            "Name": "TTASource"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "TTABuild3ED2D02B"
+                  }
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "Artifact_TTASource_Github_Source"
+                  }
+                ],
+                "Name": "CDK_Build",
+                "OutputArtifacts": [
+                  {
+                    "Name": "Artifact_TTABuild_CDK_Build"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "TTABuild"
+          }
+        ],
+        "ArtifactStore": {
+          "EncryptionKey": {
+            "Id": {
+              "Fn::GetAtt": [
+                "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                "Arn"
+              ]
+            },
+            "Type": "KMS"
+          },
+          "Location": {
+            "Ref": "TTAPipelineArtifactsBucket69AD77DA"
+          },
+          "Type": "S3"
+        },
+        "Name": "TTAPipeline"
+      },
+      "DependsOn": [
+        "TTAPipelineRoleDefaultPolicy70BF59DE",
+        "TTAPipelineRole198F0063"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/Resource"
+      }
+    },
+    "TTAPipelineTTASourceGithubSourceWebhookResourceDE367564": {
+      "Type": "AWS::CodePipeline::Webhook",
+      "Properties": {
+        "Authentication": "GITHUB_HMAC",
+        "AuthenticationConfiguration": {
+          "SecretToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:github-oauth-token:SecretString:github-oauth-token::}}"
+        },
+        "Filters": [
+          {
+            "JsonPath": "$.ref",
+            "MatchEquals": "refs/heads/{Branch}"
+          }
+        ],
+        "TargetAction": "Github_Source",
+        "TargetPipeline": {
+          "Ref": "TTAPipelineE1AE0FDF"
+        },
+        "TargetPipelineVersion": 1,
+        "RegisterWithThirdParty": true
+      },
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/TTASource/Github_Source/WebhookResource"
+      }
+    },
+    "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::102460195799:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/TTABuild/CDK_Build/CodePipelineActionRole/Resource"
+      }
+    },
+    "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleDefaultPolicyBEA4B3C1": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTABuild3ED2D02B",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleDefaultPolicyBEA4B3C1",
+        "Roles": [
+          {
+            "Ref": "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAPipeline/TTABuild/CDK_Build/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "TTABuildRole34841392": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTABuild/Role/Resource"
+      }
+    },
+    "TTABuildRoleDefaultPolicy3C7AA034": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-southeast-2:102460195799:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "TTABuild3ED2D02B"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:ap-southeast-2:102460195799:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "TTABuild3ED2D02B"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAECR286888F6",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "ecr:PutImage",
+                "ecr:InitiateLayerUpload",
+                "ecr:UploadLayerPart",
+                "ecr:CompleteLayerUpload"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAECR286888F6",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TTAPipelineArtifactsBucket69AD77DA",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "TTAPipelineArtifactsBucket69AD77DA",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "TTABuildRoleDefaultPolicy3C7AA034",
+        "Roles": [
+          {
+            "Ref": "TTABuildRole34841392"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTABuild/Role/DefaultPolicy/Resource"
+      }
+    },
+    "TTABuild3ED2D02B": {
+      "Type": "AWS::CodeBuild::Project",
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": [
+            {
+              "Name": "IMAGE_REPO_NAME",
+              "Type": "PLAINTEXT",
+              "Value": "techtestapp_ecr"
+            },
+            {
+              "Name": "IMAGE_TAG",
+              "Type": "PLAINTEXT",
+              "Value": "latest"
+            },
+            {
+              "Name": "AWS_ACCOUNT_ID",
+              "Type": "PLAINTEXT",
+              "Value": "102460195799"
+            },
+            {
+              "Name": "AWS_DEFAULT_REGION",
+              "Type": "PLAINTEXT",
+              "Value": "ap-southeast-2"
+            }
+          ],
+          "Image": "aws/codebuild/standard:4.0",
+          "PrivilegedMode": true,
+          "Type": "LINUX_CONTAINER"
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "TTABuildRole34841392",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "buildspec.yml",
+          "Type": "CODEPIPELINE"
+        },
+        "EncryptionKey": {
+          "Fn::GetAtt": [
+            "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTABuild/Resource"
+      }
+    },
+    "TTAECR286888F6": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "RepositoryName": "techtestapp_ecr"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "TTAPipeline/TTAECR/Resource"
+      }
+    }
+  }
+}
