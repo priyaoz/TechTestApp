@@ -11,13 +11,6 @@
         Shows the power of AWS CDK patterns - what's already fewer lines of imperative code
         becomes even less!
 
-        It is intended to show off the advantages of using imperative (as opposed to descriptive)
-        programming languages to create AWS infrastructure. Its flexibility is especially useful,
-        when the alternative is to use CloudFormation macros. It also shows the ease in comparison
-        to other imperative/procedural approaches such as Troposphere/Awacs, especially when leveraging the
-        powerful Assets, which combine multiple CFN Resources into one call,
-
-
 .. moduleauthor:: Michael Hoffmann <michaelh@centaur.id.au>
 
 """
@@ -57,15 +50,28 @@ class TTACluster(core.Stack):
         cluster = ecs.Cluster(self, "TTACluster", vpc=vpc)
 
         repo = ecr.Repository.from_repository_name(self, "repo", repository_name="techtestapp_ecr")
+        # dbsecret_arn = f"arn:aws:secretsmanager:{cluster_config['region']}:{cluster_config['accountid']}:secret:{cluster_config['SecMgrDBName']}"
         ecs_patterns.ApplicationLoadBalancedFargateService(self, "TTAFargateService",
                                                            cluster=cluster,  # Required
                                                            cpu=512,  # Default is 256
                                                            desired_count=2,  # Default is 1
                                                            task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
                                                                image=ecs.EcrImage.from_ecr_repository(repo),
-                                                               container_port=3000
+                                                               container_port=3000,
+                                                               environment={
+                                                                'VTT_DBUSER': 'postgres',
+                                                                'VTT_DBNAME': 'app',
+                                                                'VTT_DBPORT': '5432',
+                                                                'VTT_DBHOST': 'merlot',
+                                                                'VTT_LISTENHOST': '0.0.0.0',
+                                                                'VTT_LISTENPORT': '3000',
+                                                               },
+                                                               # secrets={
+                                                               #     'VTT_DBPASSWORD': ecs.Secret.from_secrets_manager('SecMgrDBName')
+                                                               #      # core.SecretValue.secrets_manager(secret_id=secmgrarn, json_field=secmgrkey)
+                                                               #  }
                                                            ),
-                                                           # memory_limit_mib=2048,  # Default is 512
+                                                           memory_limit_mib=2048, # this is a mandatory option with Fargate
                                                            public_load_balancer=True,
                                                            assign_public_ip=True)  # Default is False
 
