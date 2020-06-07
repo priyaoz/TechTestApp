@@ -25,6 +25,6 @@ TechTestApp
 
 # Jetbrains stuff
 .idea/
-**/*.egg-info/
 **/__pycache__/
+**/*.egg-info/
 **/cdk.context.json
