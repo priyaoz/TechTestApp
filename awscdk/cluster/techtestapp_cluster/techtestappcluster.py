@@ -60,11 +60,12 @@ class TTACluster(core.Stack):
         ecs_patterns.ApplicationLoadBalancedFargateService(self, "TTAFargateService",
                                                            cluster=cluster,  # Required
                                                            cpu=512,  # Default is 256
-                                                           desired_count=6,  # Default is 1
+                                                           desired_count=2,  # Default is 1
                                                            task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
                                                                image=ecs.EcrImage.from_ecr_repository(repo),
+                                                               container_port=3000
                                                            ),
-                                                           memory_limit_mib=2048,  # Default is 512
+                                                           # memory_limit_mib=2048,  # Default is 512
                                                            public_load_balancer=True,
                                                            assign_public_ip=True)  # Default is False
 
