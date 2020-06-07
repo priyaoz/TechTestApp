@@ -25,5 +25,6 @@ TechTestApp
 
 # Jetbrains stuff
 .idea/
-/awscdk/pipeline/techtestapp_pipeline/techtestapp_pipeline.egg-info/
+**/*.egg-info/
 **/__pycache__/
+**/cdk.context.json
