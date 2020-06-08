@@ -1,6 +1,5 @@
 [codepipeline]
 region = 'ap-southeast-2'
-accountname = 'centauridau-mike'
 accountid = '102460195799'
 githubtokenname = 'GithubToken-5jhXVl'
 githubtokenkey = 'github-oauth-token'

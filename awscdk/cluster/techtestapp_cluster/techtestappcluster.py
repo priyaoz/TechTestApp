@@ -33,9 +33,9 @@ class TTACluster(core.Stack):
 
         vpc = self.get_newvpc()
 
-        db = self.get_newdb(vpc=vpc)
+        db = self.get_newdb(vpc=vpc, clusterconfig=cluster_config)
 
-        cluster = self.make_cluster(vpc=vpc, db=db, ecrreponame="techtestapp_ecr")
+        self.make_cluster(vpc=vpc, db=db, clusterconfig=cluster_config)
 
         # TODO: proper access control for limited subnets
         # self.allow_cluster_to_db(db=db, cluster=cluster)
@@ -49,34 +49,35 @@ class TTACluster(core.Stack):
 
         :return: VPC object
         """
-        return ec2.Vpc(self, "ClusterVPC",
+        return ec2.Vpc(self, 'ClusterVPC',
                        subnet_configuration=[
                            ec2.SubnetConfiguration(
                                subnet_type=ec2.SubnetType.ISOLATED,
-                               name="DB",
+                               name='DB',
                                cidr_mask=21
                            ),
                            ec2.SubnetConfiguration(
                                subnet_type=ec2.SubnetType.PUBLIC,
-                               name="Fargate",
+                               name='Fargate',
                                cidr_mask=21
                            )
                        ],
                        )
 
-    def get_newdb(self, *, vpc) -> rds.DatabaseCluster:
+    def get_newdb(self, *, vpc, clusterconfig) -> rds.DatabaseCluster:
         """
         Create an Aurora RDS cluster in private subnets of the VPC.
 
         :param vpc: VPC object
+        :param clusterconfig: Config dict for configuration of RDS and Fargate clusters
         :return: RDS Cluster object
         """
         db = rds.DatabaseCluster(self, 'TTARDS',
                                  # this will automatically create an auto-rotating PW in SecretsManager
-                                 master_user=rds.Login(username='postgres'),
+                                 master_user=rds.Login(username=clusterconfig['dbuser']),
                                  engine=rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
                                  engine_version='10.7',
-                                 default_database_name='app',
+                                 default_database_name=clusterconfig['dbname'],
                                  removal_policy=core.RemovalPolicy.DESTROY,
                                  # Probably want this in production or such
                                  # removal_policy=core.RemovalPolicy.RETAIN,
@@ -94,44 +95,42 @@ class TTACluster(core.Stack):
 
         return db
 
-    def make_cluster(self, *, vpc, db, ecrreponame):
+    def make_cluster(self, *, vpc, db, clusterconfig):
         """
         Create an ECS Fargate cluster in public subnets within VPC running the specified container.
 
         :param vpc: The VPC
         :param db: RDS DB object (to grab secret DB from securely)
-        :param ecrreponame: name of ECR repo image
+        :param clusterconfig: Config dict for configuration of RDS and Fargate clusters
         """
         cluster = ecs.Cluster(self, "TTACluster", vpc=vpc)
 
-        repo = ecr.Repository.from_repository_name(self, "repo", repository_name=ecrreponame)
+        repo = ecr.Repository.from_repository_name(self, "repo", repository_name=clusterconfig['ecrreponame'])
         ecs_patterns.ApplicationLoadBalancedFargateService(self, "TTAFargateService",
-                                                           cluster=cluster,  # Required
-                                                           cpu=512,  # Default is 256
-                                                           desired_count=2,  # Default is 1
+                                                           cluster=cluster,
+                                                           cpu=clusterconfig['containercpu'],
+                                                           desired_count=clusterconfig['containercount'],
                                                            # this is a mandatory option with Fargate
-                                                           memory_limit_mib=2048,
+                                                           memory_limit_mib=clusterconfig['containermem'],
                                                            task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
                                                                image=ecs.EcrImage.from_ecr_repository(repo),
-                                                               container_port=3000,
+                                                               container_port=clusterconfig['listenport'],
                                                                environment={
-                                                                   'VTT_DBUSER': 'postgres',
-                                                                   'VTT_DBNAME': 'app',
-                                                                   # Aurora listens on 3306 (mysql!) even when set to postgresql by default
+                                                                   'VTT_DBUSER': clusterconfig['dbuser'],
+                                                                   'VTT_DBNAME': clusterconfig['dbname'],
                                                                    'VTT_DBHOST': db.cluster_endpoint.hostname,
+                                                                   # Hard-wiring this because RDS Aurora listens on 3306 (mysql!) even when set to postgresql by default
+                                                                   # fends off confusion and grief and anger
                                                                    'VTT_DBPORT': '3306',
-                                                                   # 'VTT_DBHOST': 'merlot',
-                                                                   # 'VTT_DBPORT': '5432',
-                                                                   'VTT_LISTENHOST': '0.0.0.0',
-                                                                   'VTT_LISTENPORT': '3000',
+                                                                   'VTT_LISTENHOST': clusterconfig['listenhost'],
+                                                                   'VTT_LISTENPORT': str(clusterconfig['listenport']),
                                                                },
-                                                               # TODO: determine object to inject here without exposing PW
-                                                               # secrets={
-                                                               #     'VTT_DBPASSWORD': db.secret.something.something.
-                                                               # }
+                                                               secrets={
+                                                                   'VTT_DBPASSWORD': ecs.Secret.from_secrets_manager(db.secret)
+                                                               }
                                                            ),
                                                            public_load_balancer=True,
-                                                           assign_public_ip=True)  # Default is False
+                                                           assign_public_ip=True)
         return cluster
 
     @staticmethod
@@ -151,10 +150,8 @@ class TTACluster(core.Stack):
         """
                Read pipeline config parameters from a TOML file.
 
-               :param configfile: File name, defaults to pipeline.toml
-               :return: Dict of the [codepipeline] section
+               :param configfile: File name, defaults to cluster.toml
+               :return: Dict of the [cluster] section
                """
-        # Servian are TOML fans it seems...
-        cluster_config = toml.load(configfile)['codepipeline']
-
+        cluster_config = toml.load(configfile)['cluster']
         return cluster_config
