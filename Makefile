@@ -1,16 +1,32 @@
 
+# Edit this one as needed to profile with roles/policies/permissions to deploy stacks
+# See the README files for what all is used here
+AWSPROFILE=centauridau-mike
+
+# Should not have to edit anything below here, unless you don't like the naming conventions
 PIPELINENAME=techtestapp-pipeline
 CLUSTERNAME=techtestapp-cluster
 AWSDIR=$(HOME)/.aws
-AWSPROFILE=centauridau-mike
 
-.PHONY: all pipeline cluster
+.PHONY: all build pipeline cluster
 
 all:
-	echo "Choose either make pipeline or make cluster"
+	echo "Options to run make with are:"
+	echo "pipeline | cluster | delpipeline | delcluster | build"
 
-pipeline:
-	cd awscdk/pipeline && docker build -t $(PIPELINENAME) . && docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME)
+build:
+	cd awscdk/pipeline && docker build -t $(PIPELINENAME) .
+	cd awscdk/cluster && docker build -t $(CLUSTERNAME) .
 
-cluster:
-	cd awscdk/cluster && docker build -t $(CLUSTERNAME) . && docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(CLUSTERNAME)
+pipeline: build
+	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME)
+
+cluster: build
+	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(CLUSTERNAME)
+
+delpipeline: build
+	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME) destroy --force
+
+delcluster: build
+	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(CLUSTERNAME) destroy --force
+

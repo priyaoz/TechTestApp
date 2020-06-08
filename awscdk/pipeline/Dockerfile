@@ -7,14 +7,14 @@ RUN \
     apk add --update nodejs npm && \
     npm install -g aws-cdk && \
     pip install --upgrade aws-cdk.core && \
-    echo "First RUN done"
+    echo "CDK installed"
 
 COPY ./ .
 
 RUN \
     pip install -r requirements.txt && \
-    echo "Second RUN done"
+    echo "CDK stack dependencies installed"
 
-ENTRYPOINT ["cdk", "deploy", "--strict", "--require-approval=never"]
-# ENTRYPOINT ["cdk", "--asset-metadata=false", "--path-metadata=false", "synth"]
+ENTRYPOINT ["cdk"]
+CMD ["deploy", "--strict", "--require-approval=never"]
 
