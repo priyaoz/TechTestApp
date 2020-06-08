@@ -127,7 +127,6 @@ class TTAPipeline(core.Stack):
             removal_policy=core.RemovalPolicy.DESTROY
         )
         ecrrepo.grant_pull_push(build_project)
-        ecrrepo.grant_pull()
 
         return build_action, build_artifact
 

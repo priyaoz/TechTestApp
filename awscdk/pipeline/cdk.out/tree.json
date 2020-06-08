@@ -333,8 +333,8 @@
                             "configuration": {
                               "Owner": "Marakai",
                               "Repo": "TechTestApp",
-                              "Branch": "feature/codebuildspec",
-                              "OAuthToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:github-oauth-token:SecretString:github-oauth-token::}}",
+                              "Branch": "develop",
+                              "OAuthToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:GithubToken-5jhXVl:SecretString:github-oauth-token::}}",
                               "PollForSourceChanges": false
                             },
                             "runOrder": 1
@@ -413,7 +413,7 @@
                           "aws:cdk:cloudformation:props": {
                             "authentication": "GITHUB_HMAC",
                             "authenticationConfiguration": {
-                              "secretToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:github-oauth-token:SecretString:github-oauth-token::}}"
+                              "secretToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:GithubToken-5jhXVl:SecretString:github-oauth-token::}}"
                             },
                             "filters": [
                               {
@@ -607,6 +607,31 @@
                                       ]
                                     }
                                   ]
+                                },
+                                {
+                                  "Action": [
+                                    "codebuild:CreateReportGroup",
+                                    "codebuild:CreateReport",
+                                    "codebuild:UpdateReport",
+                                    "codebuild:BatchPutTestCases"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":codebuild:ap-southeast-2:102460195799:report-group/",
+                                        {
+                                          "Ref": "TTABuild3ED2D02B"
+                                        },
+                                        "-*"
+                                      ]
+                                    ]
+                                  }
                                 },
                                 {
                                   "Action": [
