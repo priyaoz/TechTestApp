@@ -21,5 +21,6 @@ phases:
       - echo Pushing the Docker image...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CLUSTER_IMAGE_REPO_NAME:$IMAGE_TAG
+      - cd ../..
       - aws ecr set-repository-policy --region $AWS_DEFAULT_REGION --repository-name $IMAGE_REPO_NAME --policy-text file://ecrpolicy.json
       - aws ecr set-repository-policy --region $AWS_DEFAULT_REGION --repository-name $CLUSTER_IMAGE_REPO_NAME --policy-text file://ecrpolicy.json

@@ -127,13 +127,14 @@ class TTAPipeline(core.Stack):
         )
 
         # our build needs an ECR repo to write to
-        ecrrepo = ecr.Repository(
-            self, "TTAECR",
-            repository_name=valid_ecrname,
-            removal_policy=core.RemovalPolicy.DESTROY
-        )
-        ecrrepo.grant_pull_push(build_project)
-        ecrrepo.grant(build_project, 'ecr:SetRepositoryPolicy')
+        for reponame in [valid_ecrname, valid_cluster_ecrname]:
+            ecrrepo = ecr.Repository(
+                self, f'TTAECR{reponame}',
+                repository_name=reponame,
+                removal_policy=core.RemovalPolicy.DESTROY
+            )
+            ecrrepo.grant_pull_push(build_project)
+            ecrrepo.grant(build_project, 'ecr:SetRepositoryPolicy')
 
         return build_action, build_artifact
 
