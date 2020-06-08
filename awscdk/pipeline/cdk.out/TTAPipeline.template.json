@@ -565,6 +565,16 @@
               }
             },
             {
+              "Action": "ecr:SetRepositoryPolicy",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAECR286888F6",
+                  "Arn"
+                ]
+              }
+            },
+            {
               "Action": [
                 "s3:GetObject*",
                 "s3:GetBucket*",

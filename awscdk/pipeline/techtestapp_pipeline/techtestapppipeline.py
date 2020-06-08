@@ -53,6 +53,7 @@ class TTAPipeline(core.Stack):
         build_action, build_artifact = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
 
+        # NOTE YET SUPPORTED IN AWS CDK!
         # deploy_action = self.get_deploy(buildartifact=build_artifact)
         # pipeline.add_stage(stage_name="TTADeploy", actions=[deploy_action])
 
@@ -94,6 +95,7 @@ class TTAPipeline(core.Stack):
         """
 
         valid_ecrname = f"{pipeline_config['githubreponame'].lower()}_ecr"
+        valid_cluster_ecrname = f"{pipeline_config['githubreponame'].lower()}_cluster_ecr"
         build_artifact = cpl.Artifact()
         build_spec = codebuild.BuildSpec.from_source_filename(buildspec)
         build_project = codebuild.PipelineProject(self, "TTABuild",
@@ -104,8 +106,12 @@ class TTAPipeline(core.Stack):
                                                       compute_type=codebuild.ComputeType.SMALL,
                                                   ),
                                                   environment_variables={
+                                                      # This one is the actual TechTestApp container
                                                       'IMAGE_REPO_NAME': codebuild.BuildEnvironmentVariable(
                                                           value=valid_ecrname),
+                                                      # and this one is the cluster creator, because we can't use CodeDeploy in CDK yet
+                                                      'CLUSTER_IMAGE_REPO_NAME': codebuild.BuildEnvironmentVariable(
+                                                          value=valid_cluster_ecrname),
                                                       'IMAGE_TAG': codebuild.BuildEnvironmentVariable(value='latest'),
                                                       'AWS_ACCOUNT_ID': codebuild.BuildEnvironmentVariable(
                                                           value=pipeline_config['accountid']),
@@ -127,6 +133,7 @@ class TTAPipeline(core.Stack):
             removal_policy=core.RemovalPolicy.DESTROY
         )
         ecrrepo.grant_pull_push(build_project)
+        ecrrepo.grant(build_project, 'ecr:SetRepositoryPolicy')
 
         return build_action, build_artifact
 
@@ -135,6 +142,8 @@ class TTAPipeline(core.Stack):
         """
         Not used yet. This should handle the actual fancy deployment of the container in
         an ECS/Fargate cluster. One thing at a time.
+
+        NOTE: To clarify, as of writing this, ECS deploys are not yet supported in AWS CDK!
 
         :param buildartifact: Passed in from the creation of the Build stage
         :return: CodeDeploy action
