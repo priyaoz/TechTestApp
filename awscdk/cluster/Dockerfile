@@ -15,6 +15,7 @@ RUN \
     pip install -r requirements.txt && \
     echo "Second RUN done"
 
-ENTRYPOINT ["cdk", "deploy", "--strict", "--require-approval=never"]
-# ENTRYPOINT ["cdk", "--asset-metadata=false", "--path-metadata=false", "synth"]
+# ENTRYPOINT ["cdk", "deploy", "--strict", "--require-approval=never"]
+ENTRYPOINT ["cdk", "--asset-metadata=false", "--path-metadata=false", "synth"]
+CMD [""]
 

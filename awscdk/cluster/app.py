@@ -8,8 +8,8 @@ cluster_config = TTACluster.get_cluster_config()
 
 app = core.App()
 
-TTACluster(app, 'TTACluster',
-            env=core.Environment(region=cluster_config['region'], account=cluster_config['accountid']),
-            cluster_config=cluster_config)
+cluster = TTACluster(app, 'TTACluster',
+                     env=core.Environment(region=cluster_config['region'], account=cluster_config['accountid']),
+                     cluster_config=cluster_config)
 
 app.synth()

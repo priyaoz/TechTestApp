@@ -23,6 +23,7 @@ setuptools.setup(
         "aws-cdk.aws-iam",
         "aws-cdk.aws-ecs",
         "aws-cdk.aws-ecs-patterns",
+        "aws-cdk.aws-rds",
         "PyYAML",
         "setuptools",
         "jsii~=1.6.0",
