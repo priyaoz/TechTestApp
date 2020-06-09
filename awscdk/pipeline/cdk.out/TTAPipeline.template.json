@@ -532,6 +532,50 @@
             },
             {
               "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAECRtechtestappecrB357DCFD",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "ecr:PutImage",
+                "ecr:InitiateLayerUpload",
+                "ecr:UploadLayerPart",
+                "ecr:CompleteLayerUpload"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAECRtechtestappecrB357DCFD",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "ecr:SetRepositoryPolicy",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TTAECRtechtestappecrB357DCFD",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
                 "s3:GetObject*",
                 "s3:GetBucket*",
                 "s3:List*",
@@ -590,89 +634,6 @@
               "Resource": {
                 "Fn::GetAtt": [
                   "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
-                  "Arn"
-                ]
-              }
-            },
-            {
-              "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:BatchGetImage"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "TTAECRtechtestappecrB357DCFD",
-                  "Arn"
-                ]
-              }
-            },
-            {
-              "Action": "ecr:GetAuthorizationToken",
-              "Effect": "Allow",
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "ecr:PutImage",
-                "ecr:InitiateLayerUpload",
-                "ecr:UploadLayerPart",
-                "ecr:CompleteLayerUpload"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "TTAECRtechtestappecrB357DCFD",
-                  "Arn"
-                ]
-              }
-            },
-            {
-              "Action": "ecr:SetRepositoryPolicy",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "TTAECRtechtestappecrB357DCFD",
-                  "Arn"
-                ]
-              }
-            },
-            {
-              "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:BatchGetImage"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "TTAECRtechtestappclusterecrB631007A",
-                  "Arn"
-                ]
-              }
-            },
-            {
-              "Action": [
-                "ecr:PutImage",
-                "ecr:InitiateLayerUpload",
-                "ecr:UploadLayerPart",
-                "ecr:CompleteLayerUpload"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "TTAECRtechtestappclusterecrB631007A",
-                  "Arn"
-                ]
-              }
-            },
-            {
-              "Action": "ecr:SetRepositoryPolicy",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "TTAECRtechtestappclusterecrB631007A",
                   "Arn"
                 ]
               }
@@ -755,17 +716,6 @@
       "DeletionPolicy": "Delete",
       "Metadata": {
         "aws:cdk:path": "TTAPipeline/TTAECRtechtestapp_ecr/Resource"
-      }
-    },
-    "TTAECRtechtestappclusterecrB631007A": {
-      "Type": "AWS::ECR::Repository",
-      "Properties": {
-        "RepositoryName": "techtestapp_cluster_ecr"
-      },
-      "UpdateReplacePolicy": "Delete",
-      "DeletionPolicy": "Delete",
-      "Metadata": {
-        "aws:cdk:path": "TTAPipeline/TTAECRtechtestapp_cluster_ecr/Resource"
       }
     }
   }
