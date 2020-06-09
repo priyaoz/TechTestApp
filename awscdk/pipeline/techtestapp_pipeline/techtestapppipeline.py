@@ -25,14 +25,14 @@
 import toml
 from aws_cdk import \
     (
-        core,
-        aws_iam as iam,
-        aws_codebuild as codebuild,
-        aws_codedeploy as codedeploy,
-        aws_codepipeline as cpl,
-        aws_codepipeline_actions as cpactions,
-        aws_ecr as ecr,
-    )
+    core,
+    aws_iam as iam,
+    aws_codebuild as codebuild,
+    aws_codedeploy as codedeploy,
+    aws_codepipeline as cpl,
+    aws_codepipeline_actions as cpactions,
+    aws_ecr as ecr,
+)
 
 
 class TTAPipeline(core.Stack):
@@ -53,9 +53,8 @@ class TTAPipeline(core.Stack):
         build_action, build_artifact = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
 
-        # NOTE YET SUPPORTED IN AWS CDK!
-        # deploy_action = self.get_deploy(buildartifact=build_artifact)
-        # pipeline.add_stage(stage_name="TTADeploy", actions=[deploy_action])
+        cbuild_action, cbuild_artifact = self._get_clusterbuild(sourceartifact=build_artifact, pipeline_config=pipeline_config)
+        pipeline.add_stage(stage_name="TTACluster", actions=[cbuild_action])
 
     def _get_source(self, *, owner, repo, branch='master', secmgrarn, secmgrkey):
         """
@@ -135,6 +134,47 @@ class TTAPipeline(core.Stack):
             )
             ecrrepo.grant_pull_push(build_project)
             ecrrepo.grant(build_project, 'ecr:SetRepositoryPolicy')
+
+        return build_action, build_artifact
+
+    def _get_clusterbuild(self, *, sourceartifact, pipeline_config, buildspec='clusterspec.yml'):
+        """
+        Create the CodeBuild environment and define what YAML file to control the actual
+        build with.
+        Will also create the ECR repo, as we are, after all, building and pushing out an
+        app in a container.
+
+        :param sourceartifact: Passed in from the creation of the Source stage
+        :param buildspec: Name of the buildspec file, defaults by convention to buildspec.yml
+        :return: Tuble of CodeBuild action and CodeBuild artifact
+        """
+        valid_cluster_ecrname = f"{pipeline_config['githubreponame'].lower()}_cluster_ecr"
+        build_artifact = cpl.Artifact()
+        build_spec = codebuild.BuildSpec.from_source_filename(buildspec)
+        build_project = codebuild.PipelineProject(self, "TTACluster",
+                                                  build_spec=build_spec,
+                                                  environment=codebuild.BuildEnvironment(
+                                                      privileged=True,
+                                                      build_image=codebuild.LinuxBuildImage.STANDARD_4_0,
+                                                      compute_type=codebuild.ComputeType.SMALL,
+                                                  ),
+                                                  environment_variables={
+                                                      # and this one is the cluster creator, because we can't use CodeDeploy in CDK yet
+                                                      'CLUSTER_IMAGE_REPO_NAME': codebuild.BuildEnvironmentVariable(
+                                                          value=valid_cluster_ecrname),
+                                                      'IMAGE_TAG': codebuild.BuildEnvironmentVariable(value='latest'),
+                                                      'AWS_ACCOUNT_ID': codebuild.BuildEnvironmentVariable(
+                                                          value=pipeline_config['accountid']),
+                                                      'AWS_DEFAULT_REGION': codebuild.BuildEnvironmentVariable(
+                                                          value=pipeline_config['region']),
+                                                  }
+                                                  )
+        build_action = cpactions.CodeBuildAction(
+            action_name="CDK_Build",
+            project=build_project,
+            input=sourceartifact,
+            outputs=[build_artifact]
+        )
 
         return build_action, build_artifact
 

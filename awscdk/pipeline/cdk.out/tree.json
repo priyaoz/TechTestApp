@@ -118,6 +118,43 @@
                                 }
                               },
                               "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:DescribeKey",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::GetAtt": [
+                                    "TTAClusterRole49012274",
+                                    "Arn"
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::GetAtt": [
+                                    "TTAClusterRole49012274",
+                                    "Arn"
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
                             }
                           ],
                           "Version": "2012-10-17"
@@ -284,6 +321,16 @@
                                       "Arn"
                                     ]
                                   }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAPipelineTTAClusterCDKBuildCodePipelineActionRoleAE100E0E",
+                                      "Arn"
+                                    ]
+                                  }
                                 }
                               ],
                               "Version": "2012-10-17"
@@ -371,6 +418,42 @@
                             "roleArn": {
                               "Fn::GetAtt": [
                                 "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "TTACluster",
+                        "actions": [
+                          {
+                            "name": "CDK_Build",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_TTABuild_CDK_Build"
+                              }
+                            ],
+                            "outputArtifacts": [
+                              {
+                                "name": "Artifact_TTACluster_CDK_Build"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "TTACluster94CC096F"
+                              }
+                            },
+                            "runOrder": 1,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "TTAPipelineTTAClusterCDKBuildCodePipelineActionRoleAE100E0E",
                                 "Arn"
                               ]
                             }
@@ -523,6 +606,96 @@
                     }
                   }
                 }
+              },
+              "TTACluster": {
+                "id": "TTACluster",
+                "path": "TTAPipeline/TTAPipeline/TTACluster",
+                "children": {
+                  "CDK_Build": {
+                    "id": "CDK_Build",
+                    "path": "TTAPipeline/TTAPipeline/TTACluster/CDK_Build",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "TTAPipeline/TTAPipeline/TTACluster/CDK_Build/CodePipelineActionRole",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "TTAPipeline/TTAPipeline/TTACluster/CDK_Build/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::102460195799:root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "TTAPipeline/TTAPipeline/TTACluster/CDK_Build/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "TTAPipeline/TTAPipeline/TTACluster/CDK_Build/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchGetBuilds",
+                                            "codebuild:StartBuild",
+                                            "codebuild:StopBuild"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "TTACluster94CC096F",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "TTAPipelineTTAClusterCDKBuildCodePipelineActionRoleDefaultPolicyA59A0BC5",
+                                    "roles": [
+                                      {
+                                        "Ref": "TTAPipelineTTAClusterCDKBuildCodePipelineActionRoleAE100E0E"
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           },
@@ -642,7 +815,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "TTAECR286888F6",
+                                      "TTAECRtechtestappecrB357DCFD",
                                       "Arn"
                                     ]
                                   }
@@ -662,7 +835,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "TTAECR286888F6",
+                                      "TTAECRtechtestappecrB357DCFD",
                                       "Arn"
                                     ]
                                   }
@@ -672,7 +845,46 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "TTAECR286888F6",
+                                      "TTAECRtechtestappecrB357DCFD",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:BatchCheckLayerAvailability",
+                                    "ecr:GetDownloadUrlForLayer",
+                                    "ecr:BatchGetImage"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappclusterecrB631007A",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:PutImage",
+                                    "ecr:InitiateLayerUpload",
+                                    "ecr:UploadLayerPart",
+                                    "ecr:CompleteLayerUpload"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappclusterecrB631007A",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "ecr:SetRepositoryPolicy",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappclusterecrB631007A",
                                       "Arn"
                                     ]
                                   }
@@ -778,6 +990,11 @@
                           "value": "techtestapp_ecr"
                         },
                         {
+                          "name": "CLUSTER_IMAGE_REPO_NAME",
+                          "type": "PLAINTEXT",
+                          "value": "techtestapp_cluster_ecr"
+                        },
+                        {
                           "name": "IMAGE_TAG",
                           "type": "PLAINTEXT",
                           "value": "latest"
@@ -815,17 +1032,278 @@
               }
             }
           },
-          "TTAECR": {
-            "id": "TTAECR",
-            "path": "TTAPipeline/TTAECR",
+          "TTAECRtechtestapp_ecr": {
+            "id": "TTAECRtechtestapp_ecr",
+            "path": "TTAPipeline/TTAECRtechtestapp_ecr",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "TTAPipeline/TTAECR/Resource",
+                "path": "TTAPipeline/TTAECRtechtestapp_ecr/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
                   "aws:cdk:cloudformation:props": {
                     "repositoryName": "techtestapp_ecr"
+                  }
+                }
+              }
+            }
+          },
+          "TTAECRtechtestapp_cluster_ecr": {
+            "id": "TTAECRtechtestapp_cluster_ecr",
+            "path": "TTAPipeline/TTAECRtechtestapp_cluster_ecr",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TTAPipeline/TTAECRtechtestapp_cluster_ecr/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
+                  "aws:cdk:cloudformation:props": {
+                    "repositoryName": "techtestapp_cluster_ecr"
+                  }
+                }
+              }
+            }
+          },
+          "TTACluster": {
+            "id": "TTACluster",
+            "path": "TTAPipeline/TTACluster",
+            "children": {
+              "Role": {
+                "id": "Role",
+                "path": "TTAPipeline/TTACluster/Role",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TTAPipeline/TTACluster/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codebuild.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "TTAPipeline/TTACluster/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TTAPipeline/TTACluster/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "logs:CreateLogGroup",
+                                    "logs:CreateLogStream",
+                                    "logs:PutLogEvents"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":logs:ap-southeast-2:102460195799:log-group:/aws/codebuild/",
+                                          {
+                                            "Ref": "TTACluster94CC096F"
+                                          }
+                                        ]
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":logs:ap-southeast-2:102460195799:log-group:/aws/codebuild/",
+                                          {
+                                            "Ref": "TTACluster94CC096F"
+                                          },
+                                          ":*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "codebuild:CreateReportGroup",
+                                    "codebuild:CreateReport",
+                                    "codebuild:UpdateReport",
+                                    "codebuild:BatchPutTestCases"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":codebuild:ap-southeast-2:102460195799:report-group/",
+                                        {
+                                          "Ref": "TTACluster94CC096F"
+                                        },
+                                        "-*"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject*",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "TTAPipelineArtifactsBucket69AD77DA",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "TTAPipelineArtifactsBucket69AD77DA",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "TTAClusterRoleDefaultPolicyF082F6D5",
+                            "roles": [
+                              {
+                                "Ref": "TTAClusterRole49012274"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "TTAPipeline/TTACluster/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                  "aws:cdk:cloudformation:props": {
+                    "artifacts": {
+                      "type": "CODEPIPELINE"
+                    },
+                    "environment": {
+                      "type": "LINUX_CONTAINER",
+                      "image": "aws/codebuild/standard:4.0",
+                      "privilegedMode": true,
+                      "computeType": "BUILD_GENERAL1_SMALL",
+                      "environmentVariables": [
+                        {
+                          "name": "CLUSTER_IMAGE_REPO_NAME",
+                          "type": "PLAINTEXT",
+                          "value": "techtestapp_cluster_ecr"
+                        },
+                        {
+                          "name": "IMAGE_TAG",
+                          "type": "PLAINTEXT",
+                          "value": "latest"
+                        },
+                        {
+                          "name": "AWS_ACCOUNT_ID",
+                          "type": "PLAINTEXT",
+                          "value": "102460195799"
+                        },
+                        {
+                          "name": "AWS_DEFAULT_REGION",
+                          "type": "PLAINTEXT",
+                          "value": "ap-southeast-2"
+                        }
+                      ]
+                    },
+                    "serviceRole": {
+                      "Fn::GetAtt": [
+                        "TTAClusterRole49012274",
+                        "Arn"
+                      ]
+                    },
+                    "source": {
+                      "type": "CODEPIPELINE",
+                      "buildSpec": "clusterspec.yml"
+                    },
+                    "encryptionKey": {
+                      "Fn::GetAtt": [
+                        "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                        "Arn"
+                      ]
+                    }
                   }
                 }
               }
