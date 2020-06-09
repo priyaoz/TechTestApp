@@ -122,10 +122,7 @@
                             {
                               "Action": [
                                 "kms:Decrypt",
-                                "kms:DescribeKey",
-                                "kms:Encrypt",
-                                "kms:ReEncrypt*",
-                                "kms:GenerateDataKey*"
+                                "kms:DescribeKey"
                               ],
                               "Effect": "Allow",
                               "Principal": {
@@ -431,12 +428,7 @@
                             "name": "CDK_Build",
                             "inputArtifacts": [
                               {
-                                "name": "Artifact_TTABuild_CDK_Build"
-                              }
-                            ],
-                            "outputArtifacts": [
-                              {
-                                "name": "Artifact_TTACluster_CDK_Build"
+                                "name": "Artifact_TTASource_Github_Source"
                               }
                             ],
                             "actionTypeId": {
@@ -808,6 +800,70 @@
                                 },
                                 {
                                   "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject*",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "TTAPipelineArtifactsBucket69AD77DA",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "TTAPipelineArtifactsBucket69AD77DA",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
                                     "ecr:BatchCheckLayerAvailability",
                                     "ecr:GetDownloadUrlForLayer",
                                     "ecr:BatchGetImage"
@@ -888,70 +944,6 @@
                                       "Arn"
                                     ]
                                   }
-                                },
-                                {
-                                  "Action": [
-                                    "s3:GetObject*",
-                                    "s3:GetBucket*",
-                                    "s3:List*",
-                                    "s3:DeleteObject*",
-                                    "s3:PutObject*",
-                                    "s3:Abort*"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": [
-                                    {
-                                      "Fn::GetAtt": [
-                                        "TTAPipelineArtifactsBucket69AD77DA",
-                                        "Arn"
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Join": [
-                                        "",
-                                        [
-                                          {
-                                            "Fn::GetAtt": [
-                                              "TTAPipelineArtifactsBucket69AD77DA",
-                                              "Arn"
-                                            ]
-                                          },
-                                          "/*"
-                                        ]
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Action": [
-                                    "kms:Decrypt",
-                                    "kms:DescribeKey",
-                                    "kms:Encrypt",
-                                    "kms:ReEncrypt*",
-                                    "kms:GenerateDataKey*"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
-                                      "Arn"
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Action": [
-                                    "kms:Decrypt",
-                                    "kms:Encrypt",
-                                    "kms:ReEncrypt*",
-                                    "kms:GenerateDataKey*"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
-                                      "Arn"
-                                    ]
-                                  }
                                 }
                               ],
                               "Version": "2012-10-17"
@@ -1027,38 +1019,6 @@
                         "Arn"
                       ]
                     }
-                  }
-                }
-              }
-            }
-          },
-          "TTAECRtechtestapp_ecr": {
-            "id": "TTAECRtechtestapp_ecr",
-            "path": "TTAPipeline/TTAECRtechtestapp_ecr",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "TTAPipeline/TTAECRtechtestapp_ecr/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
-                  "aws:cdk:cloudformation:props": {
-                    "repositoryName": "techtestapp_ecr"
-                  }
-                }
-              }
-            }
-          },
-          "TTAECRtechtestapp_cluster_ecr": {
-            "id": "TTAECRtechtestapp_cluster_ecr",
-            "path": "TTAPipeline/TTAECRtechtestapp_cluster_ecr",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "TTAPipeline/TTAECRtechtestapp_cluster_ecr/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
-                  "aws:cdk:cloudformation:props": {
-                    "repositoryName": "techtestapp_cluster_ecr"
                   }
                 }
               }
@@ -1175,10 +1135,7 @@
                                   "Action": [
                                     "s3:GetObject*",
                                     "s3:GetBucket*",
-                                    "s3:List*",
-                                    "s3:DeleteObject*",
-                                    "s3:PutObject*",
-                                    "s3:Abort*"
+                                    "s3:List*"
                                   ],
                                   "Effect": "Allow",
                                   "Resource": [
@@ -1207,10 +1164,7 @@
                                 {
                                   "Action": [
                                     "kms:Decrypt",
-                                    "kms:DescribeKey",
-                                    "kms:Encrypt",
-                                    "kms:ReEncrypt*",
-                                    "kms:GenerateDataKey*"
+                                    "kms:DescribeKey"
                                   ],
                                   "Effect": "Allow",
                                   "Resource": {
@@ -1231,6 +1185,89 @@
                                   "Resource": {
                                     "Fn::GetAtt": [
                                       "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:BatchCheckLayerAvailability",
+                                    "ecr:GetDownloadUrlForLayer",
+                                    "ecr:BatchGetImage"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappecrB357DCFD",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "ecr:GetAuthorizationToken",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:PutImage",
+                                    "ecr:InitiateLayerUpload",
+                                    "ecr:UploadLayerPart",
+                                    "ecr:CompleteLayerUpload"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappecrB357DCFD",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "ecr:SetRepositoryPolicy",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappecrB357DCFD",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:BatchCheckLayerAvailability",
+                                    "ecr:GetDownloadUrlForLayer",
+                                    "ecr:BatchGetImage"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappclusterecrB631007A",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:PutImage",
+                                    "ecr:InitiateLayerUpload",
+                                    "ecr:UploadLayerPart",
+                                    "ecr:CompleteLayerUpload"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappclusterecrB631007A",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "ecr:SetRepositoryPolicy",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TTAECRtechtestappclusterecrB631007A",
                                       "Arn"
                                     ]
                                   }
@@ -1304,6 +1341,38 @@
                         "Arn"
                       ]
                     }
+                  }
+                }
+              }
+            }
+          },
+          "TTAECRtechtestapp_ecr": {
+            "id": "TTAECRtechtestapp_ecr",
+            "path": "TTAPipeline/TTAECRtechtestapp_ecr",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TTAPipeline/TTAECRtechtestapp_ecr/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
+                  "aws:cdk:cloudformation:props": {
+                    "repositoryName": "techtestapp_ecr"
+                  }
+                }
+              }
+            }
+          },
+          "TTAECRtechtestapp_cluster_ecr": {
+            "id": "TTAECRtechtestapp_cluster_ecr",
+            "path": "TTAPipeline/TTAECRtechtestapp_cluster_ecr",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TTAPipeline/TTAECRtechtestapp_cluster_ecr/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
+                  "aws:cdk:cloudformation:props": {
+                    "repositoryName": "techtestapp_cluster_ecr"
                   }
                 }
               }

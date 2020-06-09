@@ -50,12 +50,15 @@ class TTAPipeline(core.Stack):
                                                           secmgrkey=pipeline_config['githubtokenkey'])
         pipeline.add_stage(stage_name="TTASource", actions=[source_action])
 
-        build_action, build_artifact = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        build_action, build_artifact, build_project = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
 
-        # cbuild_action, cbuild_artifact = self._get_clusterbuild(sourceartifact=source_artifact, pipeline_config=pipeline_config)
-        cbuild_action = self._get_clusterbuild(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        cbuild_action, cbuild_project = self._get_clusterbuild(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="TTACluster", actions=[cbuild_action])
+
+        valid_app_ecrname = f"{pipeline_config['githubreponame'].lower()}_ecr"
+        valid_cluster_ecrname = f"{pipeline_config['githubreponame'].lower()}_cluster_ecr"
+        self._make_ecrrepos_and_grant(repolist=[valid_app_ecrname, valid_cluster_ecrname], projects=[build_project, cbuild_project])
 
     def _get_source(self, *, owner, repo, branch='master', secmgrarn, secmgrkey):
         """
@@ -94,7 +97,7 @@ class TTAPipeline(core.Stack):
         :return: Tuble of CodeBuild action and CodeBuild artifact
         """
 
-        valid_ecrname = f"{pipeline_config['githubreponame'].lower()}_ecr"
+        valid_app_ecrname = f"{pipeline_config['githubreponame'].lower()}_ecr"
         valid_cluster_ecrname = f"{pipeline_config['githubreponame'].lower()}_cluster_ecr"
         build_artifact = cpl.Artifact()
         build_spec = codebuild.BuildSpec.from_source_filename(buildspec)
@@ -108,7 +111,7 @@ class TTAPipeline(core.Stack):
                                                   environment_variables={
                                                       # This one is the actual TechTestApp container
                                                       'IMAGE_REPO_NAME': codebuild.BuildEnvironmentVariable(
-                                                          value=valid_ecrname),
+                                                          value=valid_app_ecrname),
                                                       # and this one is the cluster creator, because we can't use CodeDeploy in CDK yet
                                                       'CLUSTER_IMAGE_REPO_NAME': codebuild.BuildEnvironmentVariable(
                                                           value=valid_cluster_ecrname),
@@ -125,18 +128,19 @@ class TTAPipeline(core.Stack):
             input=sourceartifact,
             outputs=[build_artifact]
         )
+        return build_action, build_artifact, build_project
 
+    def _make_ecrrepos_and_grant(self, *, repolist, projects):
         # our build needs an ECR repo to write to
-        for reponame in [valid_ecrname, valid_cluster_ecrname]:
+        for reponame in repolist:
             ecrrepo = ecr.Repository(
                 self, f'TTAECR{reponame}',
                 repository_name=reponame,
                 removal_policy=core.RemovalPolicy.DESTROY
             )
-            ecrrepo.grant_pull_push(build_project)
-            ecrrepo.grant(build_project, 'ecr:SetRepositoryPolicy')
-
-        return build_action, build_artifact
+            for p in projects:
+                ecrrepo.grant_pull_push(p)
+                ecrrepo.grant(p, 'ecr:SetRepositoryPolicy')
 
     def _get_clusterbuild(self, *, sourceartifact, pipeline_config, buildspec='clusterspec.yml'):
         """
@@ -176,9 +180,8 @@ class TTAPipeline(core.Stack):
             input=sourceartifact,
         #    outputs=[build_artifact]
         )
-
         # return build_action, build_artifact
-        return build_action
+        return build_action, build_project
 
     @staticmethod
     def _get_token(*, secmgrarn, secmgrkey):
