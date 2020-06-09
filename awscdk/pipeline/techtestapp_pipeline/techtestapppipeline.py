@@ -53,7 +53,8 @@ class TTAPipeline(core.Stack):
         build_action, build_artifact = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
 
-        cbuild_action, cbuild_artifact = self._get_clusterbuild(sourceartifact=build_artifact, pipeline_config=pipeline_config)
+        # cbuild_action, cbuild_artifact = self._get_clusterbuild(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        cbuild_action = self._get_clusterbuild(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="TTACluster", actions=[cbuild_action])
 
     def _get_source(self, *, owner, repo, branch='master', secmgrarn, secmgrkey):
@@ -149,7 +150,7 @@ class TTAPipeline(core.Stack):
         :return: Tuble of CodeBuild action and CodeBuild artifact
         """
         valid_cluster_ecrname = f"{pipeline_config['githubreponame'].lower()}_cluster_ecr"
-        build_artifact = cpl.Artifact()
+        # build_artifact = cpl.Artifact()
         build_spec = codebuild.BuildSpec.from_source_filename(buildspec)
         build_project = codebuild.PipelineProject(self, "TTACluster",
                                                   build_spec=build_spec,
@@ -173,26 +174,11 @@ class TTAPipeline(core.Stack):
             action_name="CDK_Build",
             project=build_project,
             input=sourceartifact,
-            outputs=[build_artifact]
+        #    outputs=[build_artifact]
         )
 
-        return build_action, build_artifact
-
-    @staticmethod
-    def _get_deploy(*, buildartifact):
-        """
-        Not used yet. This should handle the actual fancy deployment of the container in
-        an ECS/Fargate cluster. One thing at a time.
-
-        NOTE: To clarify, as of writing this, ECS deploys are not yet supported in AWS CDK!
-
-        :param buildartifact: Passed in from the creation of the Build stage
-        :return: CodeDeploy action
-        """
-        deploy_action = cpactions.CodeDeployEcsDeployAction(
-            action_name="CDK_Deploy",
-            input=buildartifact)
-        return deploy_action
+        # return build_action, build_artifact
+        return build_action
 
     @staticmethod
     def _get_token(*, secmgrarn, secmgrkey):
