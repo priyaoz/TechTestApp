@@ -27,6 +27,7 @@ setuptools.setup(
         "PyYAML",
         "setuptools",
         "jsii~=1.6.0",
+        "boto3",
         "toml"
     ],
 
