@@ -53,12 +53,13 @@ class TTAPipeline(core.Stack):
         build_action, build_artifact, build_project = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
 
-        cbuild_action, cbuild_project = self._get_clusterbuild(sourceartifact=source_artifact, pipeline_config=pipeline_config)
-        pipeline.add_stage(stage_name="TTACluster", actions=[cbuild_action])
+        # cbuild_action, cbuild_project = self._get_clusterbuild(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        # pipeline.add_stage(stage_name="TTACluster", actions=[cbuild_action])
 
         valid_app_ecrname = f"{pipeline_config['githubreponame'].lower()}_ecr"
         valid_cluster_ecrname = f"{pipeline_config['githubreponame'].lower()}_cluster_ecr"
-        self._make_ecrrepos_and_grant(repolist=[valid_app_ecrname, valid_cluster_ecrname], projects=[build_project, cbuild_project])
+        # self._make_ecrrepos_and_grant(repolist=[valid_app_ecrname, valid_cluster_ecrname], projects=[build_project, cbuild_project])
+        self._make_ecrrepos_and_grant(repolist=[valid_app_ecrname, valid_cluster_ecrname], projects=[build_project])
 
     def _get_source(self, *, owner, repo, branch='master', secmgrarn, secmgrkey):
         """
@@ -113,8 +114,8 @@ class TTAPipeline(core.Stack):
                                                       'IMAGE_REPO_NAME': codebuild.BuildEnvironmentVariable(
                                                           value=valid_app_ecrname),
                                                       # and this one is the cluster creator, because we can't use CodeDeploy in CDK yet
-                                                      'CLUSTER_IMAGE_REPO_NAME': codebuild.BuildEnvironmentVariable(
-                                                          value=valid_cluster_ecrname),
+                                                      # 'CLUSTER_IMAGE_REPO_NAME': codebuild.BuildEnvironmentVariable(
+                                                      #     value=valid_cluster_ecrname),
                                                       'IMAGE_TAG': codebuild.BuildEnvironmentVariable(value='latest'),
                                                       'AWS_ACCOUNT_ID': codebuild.BuildEnvironmentVariable(
                                                           value=pipeline_config['accountid']),
