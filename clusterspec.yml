@@ -22,7 +22,9 @@ phases:
       - cdk deploy -e TTAVPC --strict --require-approval=never
       - cdk deploy -e TTARDS --strict --require-approval=never
       - echo "this is where we have to figure out how to get PW from RDS into Fargate"
-      # - cdk deploy -e TTAFargate --strict --require-approval=never
+      - echo "promptly failed on fargate due to missing IAM permissions, now attached some"
+      - echo "still not enough..."
+      - cdk deploy -e TTAFargate --strict --require-approval=never
 
   post_build:
     commands:
