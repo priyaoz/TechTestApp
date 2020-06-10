@@ -24,5 +24,6 @@ pipeline: build
 	sh awscdk/pipeline/attach_policies.sh
 
 delpipeline: build
+	-sh awscdk/pipeline/detach_policies.sh
 	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME) destroy --force
 

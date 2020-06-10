@@ -1,3 +1,4 @@
+import argparse
 import json
 import boto3
 import base64
@@ -124,4 +125,20 @@ class TransferPw:
         # without the risk of exposing passwords in memory
         newarn = self.set_secret(client,  newsecret, self.get_secret(client, rdssecret))
         return newarn
+
+
+def args_handler():
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument('-R', '--rdssecret', help='RDS SecretsManager ARN or name.', required=True)
+    argparser.add_argument('-N', '--newsecret', help="Name of new SecretsManager entry", required=True)
+    argparser.add_argument('-r', '--region', help="AWS region", required=False, default='ap-southeast-2')
+    args = argparser.parse_args()
+    return args, argparser
+
+
+if __name__ == '__main__':
+    args, ap = args_handler()
+
+    t = TransferPw()
+    t.transfer_pw(args.region, args.rdssecret, args.newsecret)
 
