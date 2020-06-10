@@ -20,7 +20,7 @@ phases:
       - echo "it has to be at ttapipeline-ttacluster-something"
       # - cdk synth '*'
       - cdk deploy -e TTAVPC --strict --require-approval=never
-      # - cdk deploy -e TTARDS --strict --require-approval=never
+      - cdk deploy -e TTARDS --strict --require-approval=never
       - echo "this is where we have to figure out how to get PW from RDS into Fargate"
       # - cdk deploy -e TTAFargate --strict --require-approval=never
 
