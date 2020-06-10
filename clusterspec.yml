@@ -19,6 +19,7 @@ phases:
       - cdk deploy -e TTAVPC --strict --require-approval=never
       - cdk deploy -e TTARDS --strict --require-approval=never
       - echo "this is where we have to figure out how to get PW from RDS into Fargate"
+      - echo "and do the DB init, too: updatedb -s"
       - cdk deploy -e TTAFargate --strict --require-approval=never
 
   post_build:

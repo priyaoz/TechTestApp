@@ -49,10 +49,10 @@ class TTAPipeline(core.Stack):
                                                           secmgrkey=pipeline_config['githubtokenkey'])
         pipeline.add_stage(stage_name="TTASource", actions=[source_action])
 
-        # build_action, build_artifact = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
-        # pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
+        build_action, _ = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
 
-        cluster_action, cluster_artifact = self._get_cluster(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        cluster_action, _ = self._get_cluster(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="TTACluster", actions=[cluster_action])
 
     def _get_source(self, *, owner, repo, branch='master', secmgrarn, secmgrkey):
@@ -134,10 +134,11 @@ class TTAPipeline(core.Stack):
 
     def _get_cluster(self, *, sourceartifact, pipeline_config, buildspec='clusterspec.yml'):
         """
+        Build project to deploy the whole TechTestApp shebang.
 
         :param sourceartifact: Passed in from the creation of the Source stage
-        :param buildspec: Name of the buildspec file, defaults by convention to buildspec.yml
-        :return: Tuble of CodeBuild action and CodeBuild artifact
+        :param buildspec: Name of the buildspec file, defaults by convention to clusterspec.yml
+        :return: Tuple of CodeBuild action and CodeBuild artifact
         """
 
         build_artifact = cpl.Artifact()

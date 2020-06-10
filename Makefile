@@ -1,39 +1,28 @@
 
-# Edit this one as needed to profile with roles/policies/permissions to deploy stacks
+# Edit these as needed to profile with roles/policies/permissions to deploy stacks and the right AWS credentials
 # See the README files for what all is used here
-AWSPROFILE=centauridau-mike
+# Also don't forget to edit 'awscdk/pipeline/attach_policies.sh` to see if you need permission for CodeBuild!
 
-# Should not have to edit anything below here, unless you don't like the naming conventions
-PIPELINENAME=techtestapp-pipeline
-clusterNAME=techtestapp-cluster
-RDSNAME=techtestapp-rds
+AWSPROFILE=centauridau-mike
 AWSDIR=$(HOME)/.aws
 
-.PHONY: all build pipeline cluster delpipeline delcluster buildpipeline buildcluster
+# Should not have to edit anything below here, unless you don't like the naming conventions
+
+PIPELINENAME=techtestapp-pipeline
+
+.PHONY: all build pipeline delpipeline
 
 all:
 	echo "Options to run make with are:"
-	echo "pipeline | cluster | delpipeline | delcluster | build"
+	echo "pipeline | delpipeline | build"
 
-buildpipeline:
+build:
 	cd awscdk/pipeline && docker build -t $(PIPELINENAME) .
 
-buildcluster:
-	cd awscdk/cluster && docker build -t $(CLUSTERNAME) .
-
-build: buildpipeline buildcluster
-
-pipeline: buildpipeline
+pipeline: build
 	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME)
-	cd awscdk/pipeline && sh attach_policies.sh
+	sh awscdk/pipeline/attach_policies.sh
 
-cluster: buildcluster
-	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(CLUSTERNAME)
-
-delpipeline: buildpipeline
+delpipeline: build
 	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME) destroy --force
-
-delcluster: buildcluster
-	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(CLUSTERNAME) destroy --force
-
 
