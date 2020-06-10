@@ -25,6 +25,7 @@ build: buildpipeline buildcluster
 
 pipeline: buildpipeline
 	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME)
+	cd awscdk/pipeline && sh attach_policies.sh
 
 cluster: buildcluster
 	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(CLUSTERNAME)
