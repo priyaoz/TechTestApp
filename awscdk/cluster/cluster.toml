@@ -3,6 +3,7 @@ region = 'ap-southeast-2'
 accountid = '102460195799'
 dbuser= 'postgres'
 dbname = 'app'
+dbsecretname = 'VTT_PW'
 listenhost = '0.0.0.0'
 listenport = 3000
 dbhost = 'localhost'

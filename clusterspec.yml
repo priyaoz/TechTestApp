@@ -16,10 +16,12 @@ phases:
       - echo Build started on `date`
       - cdk deploy -e TTAVPC --strict --require-approval=never
       - cdk deploy -e TTARDS --strict --require-approval=never
-      - echo "this is where we have to figure out how to get PW from RDS into Fargate"
-      # - (cd ../transferpw && python3 transferpw.py -R RDSsecret -N VTT_PW)
+      # get the ARN for the RDS secret from the TTARDS stack
+      - rdsarn=$(aws cloudformation describe-stack-resources --stack-name TTARDS --query 'StackResources[?ResourceType==`AWS::SecretsManager::Secret`].PhysicalResourceId' --output text)
+      # inject it into another secret with only the password (and no JSON structure)
+      - (cd ../transferpw && python3 transferpw.py -R "${rdsarn}" -N VTT_PW)
       # - echo "and do the DB init, too: updatedb -s"
-      # - cdk deploy -e TTAFargate --strict --require-approval=never
+      - cdk deploy -e TTAFargate --strict --require-approval=never
 
   post_build:
     commands:

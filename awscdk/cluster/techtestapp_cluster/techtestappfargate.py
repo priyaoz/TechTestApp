@@ -24,10 +24,10 @@ from aws_cdk import \
 
 
 class TTAFargate(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, *, vpc, dbendpoint, dbsecret, cluster_config, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str, *, vpc, dbendpoint, dbsecretarn, cluster_config, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.make_fargate(vpc=vpc, dbendpoint=dbendpoint, dbsecret=dbsecret, clusterconfig=cluster_config)
+        self.make_fargate(vpc=vpc, dbendpoint=dbendpoint, dbsecret=dbsecretarn, clusterconfig=cluster_config)
 
     def make_fargate(self, *, vpc, dbendpoint, dbsecret, clusterconfig):
         """
@@ -41,8 +41,8 @@ class TTAFargate(core.Stack):
         cluster = ecs.Cluster(self, "TTACluster", vpc=vpc)
 
         # let's test this
-        secretarn = 'arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:DUMMY_PASSWORD-1z45re'
-        sec = sm.Secret.from_secret_arn(self, 'SEC', secretarn)
+        # secretarn = 'arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:DUMMY_PASSWORD-1z45re'
+        sec = sm.Secret.from_secret_arn(self, 'SEC', dbsecret)
         repo = ecr.Repository.from_repository_name(self, "repo", repository_name=clusterconfig['ecrreponame'])
         ecs_patterns.ApplicationLoadBalancedFargateService(self, "FargateService",
                                                            cluster=cluster,
@@ -64,7 +64,6 @@ class TTAFargate(core.Stack):
                                                                    'VTT_LISTENPORT': str(clusterconfig['listenport']),
                                                                },
                                                                secrets={
-                                                                   # 'VTT_DBPASSWORD': ecs.Secret.from_secrets_manager(dbsecret)
                                                                    'VTT_DBPASSWORD': ecs.Secret.from_secrets_manager(sec)
                                                                }
                                                            ),

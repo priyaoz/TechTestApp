@@ -59,7 +59,5 @@ class TTARDS(core.Stack):
                                  storage_encrypted=True
                                  )
 
-        # core.CfnOutput(self, "RDSEasyExportName", export_name="TTARDSSecretAttachmentARN", value=db.secret.secret_arn)
-
         return db
 

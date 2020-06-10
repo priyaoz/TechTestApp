@@ -73,6 +73,8 @@ class TransferPw:
                 # We can't find the resource that you asked for.
                 # Deal with the exception here, and/or rethrow at your discretion.
                 raise e
+        except Exception as e:
+            raise RuntimeError(f'something weird happened\n{e}')
         else:
             # Decrypts secret using the associated KMS CMK.
             # Depending on whether the secret is a string or binary, one of these fields will be populated.
@@ -140,5 +142,5 @@ if __name__ == '__main__':
     args, ap = args_handler()
 
     t = TransferPw()
-    t.transfer_pw(args.region, args.rdssecret, args.newsecret)
+    t.transfer_pw(region=args.region, rdssecret=args.rdssecret, newsecret=args.newsecret)
 

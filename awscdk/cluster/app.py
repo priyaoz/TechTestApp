@@ -1,10 +1,28 @@
 #!/usr/bin/env python3
-
+import boto3
 import toml
 from aws_cdk import core
 from techtestapp_cluster.techtestappfargate import TTAFargate
 from techtestapp_cluster.techtestapprds import TTARDS
 from techtestapp_cluster.techtestappvpc import TTAVPC
+
+
+def get_client(*, region_name='ap-southeast-2', secretid):
+    """
+    Create a boto3 client.
+
+    :param region_name: Regon name
+    :param secretid: Name of secret in SecretManager
+    :return: ARN of Secret
+    """
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+    result = client.describe_secret(SecretId=secretid)
+    return result['ARN']
 
 
 def get_cluster_config(configfile='cluster.toml'):
@@ -19,6 +37,7 @@ def get_cluster_config(configfile='cluster.toml'):
 
 
 cluster_config = get_cluster_config()
+secret_arn = get_client(secretid=cluster_config['dbsecretname'])
 
 app = core.App()
 
@@ -31,8 +50,9 @@ assignment_rds = TTARDS(app, 'TTARDS',
 assignment_fargate = TTAFargate(app, 'TTAFargate',
                                 env=core.Environment(region=cluster_config['region'],
                                                      account=cluster_config['accountid']),
-                                dbendpoint=assignment_rds.endpoint, dbsecret=assignment_rds.secret,
+                                dbendpoint=assignment_rds.endpoint, dbsecretarn=secret_arn,
                                 vpc=assignment_vpc.vpc,
                                 cluster_config=cluster_config)
 
 app.synth()
+
