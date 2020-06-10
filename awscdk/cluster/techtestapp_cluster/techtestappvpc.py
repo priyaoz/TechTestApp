@@ -39,8 +39,13 @@ class TTAVPC(core.Stack):
         return ec2.Vpc(self, 'VPC',
                        subnet_configuration=[
                            ec2.SubnetConfiguration(
-                               subnet_type=ec2.SubnetType.ISOLATED,
+                               subnet_type=ec2.SubnetType.PRIVATE,
                                name='DB',
+                               cidr_mask=21
+                           ),
+                           ec2.SubnetConfiguration(
+                               subnet_type=ec2.SubnetType.ISOLATED,
+                               name='OldDB',
                                cidr_mask=21
                            ),
                            ec2.SubnetConfiguration(
