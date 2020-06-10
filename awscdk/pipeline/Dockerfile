@@ -4,6 +4,7 @@ VOLUME "/root/.aws"
 ENV AWS_PROFILE=default
 
 RUN \
+    echo "start" && \
     apk add --update nodejs npm && \
     npm install -g aws-cdk && \
     pip install --upgrade aws-cdk.core && \

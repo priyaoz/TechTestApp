@@ -36,7 +36,6 @@ from aws_cdk import \
 
 
 class TTAPipeline(core.Stack):
-
     def __init__(self, scope: core.Construct, id: str, *, pipeline_config, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -50,8 +49,11 @@ class TTAPipeline(core.Stack):
                                                           secmgrkey=pipeline_config['githubtokenkey'])
         pipeline.add_stage(stage_name="TTASource", actions=[source_action])
 
-        build_action, build_artifact = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
-        pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
+        # build_action, build_artifact = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        # pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
+
+        cluster_action, cluster_artifact = self._get_cluster(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        pipeline.add_stage(stage_name="TTACluster", actions=[cluster_action])
 
     def _get_source(self, *, owner, repo, branch='master', secmgrarn, secmgrkey):
         """
@@ -97,7 +99,7 @@ class TTAPipeline(core.Stack):
                                                   build_spec=build_spec,
                                                   environment=codebuild.BuildEnvironment(
                                                       privileged=True,
-                                                      build_image=codebuild.LinuxBuildImage.STANDARD_4_0,
+                                                      build_image=codebuild.LinuxBuildImage.AMAZON_LINUX_2_3,
                                                       compute_type=codebuild.ComputeType.SMALL,
                                                   ),
                                                   environment_variables={
@@ -129,6 +131,38 @@ class TTAPipeline(core.Stack):
         )
         ecrrepo.grant_pull_push(project)
         ecrrepo.grant(project, 'ecr:SetRepositoryPolicy')
+
+    def _get_cluster(self, *, sourceartifact, pipeline_config, buildspec='clusterspec.yml'):
+        """
+
+        :param sourceartifact: Passed in from the creation of the Source stage
+        :param buildspec: Name of the buildspec file, defaults by convention to buildspec.yml
+        :return: Tuble of CodeBuild action and CodeBuild artifact
+        """
+
+        build_artifact = cpl.Artifact()
+        build_spec = codebuild.BuildSpec.from_source_filename(buildspec)
+        build_project = codebuild.PipelineProject(self, "TTACluster",
+                                                  build_spec=build_spec,
+                                                  environment=codebuild.BuildEnvironment(
+                                                      privileged=True,
+                                                      build_image=codebuild.LinuxBuildImage.AMAZON_LINUX_2_3,
+                                                      compute_type=codebuild.ComputeType.SMALL,
+                                                  ),
+                                                  environment_variables={
+                                                      'AWS_ACCOUNT_ID': codebuild.BuildEnvironmentVariable(
+                                                          value=pipeline_config['accountid']),
+                                                      'AWS_DEFAULT_REGION': codebuild.BuildEnvironmentVariable(
+                                                          value=pipeline_config['region']),
+                                                  }
+                                                  )
+        build_action = cpactions.CodeBuildAction(
+            action_name="CDK_Cluster",
+            project=build_project,
+            input=sourceartifact,
+            outputs=[build_artifact]
+        )
+        return build_action, build_artifact
 
     @staticmethod
     def _get_token(*, secmgrarn, secmgrkey):

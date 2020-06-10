@@ -5,36 +5,34 @@ AWSPROFILE=centauridau-mike
 
 # Should not have to edit anything below here, unless you don't like the naming conventions
 PIPELINENAME=techtestapp-pipeline
-FARGATENAME=techtestapp-fargate
+clusterNAME=techtestapp-cluster
 RDSNAME=techtestapp-rds
 AWSDIR=$(HOME)/.aws
 
-.PHONY: all build pipeline cluster
+.PHONY: all build pipeline cluster delpipeline delcluster buildpipeline buildcluster
 
 all:
 	echo "Options to run make with are:"
-	echo "pipeline | fargate | rds | delpipeline | delfargate | delrds | build"
+	echo "pipeline | cluster | delpipeline | delcluster | build"
 
-build:
+buildpipeline:
 	cd awscdk/pipeline && docker build -t $(PIPELINENAME) .
-	cd awscdk/fargate && docker build -t $(FARGATENAME) .
-	cd awscdk/rds && docker build -t $(RDSNAME) .
 
-pipeline: build
+buildcluster:
+	cd awscdk/cluster && docker build -t $(CLUSTERNAME) .
+
+build: buildpipeline buildcluster
+
+pipeline: buildpipeline
 	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME)
 
-fargate: build
-	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(FARGATENAME)
+cluster: buildcluster
+	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(CLUSTERNAME)
 
-rds: build
-	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(RDSNAME)
-
-delpipeline: build
+delpipeline: buildpipeline
 	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(PIPELINENAME) destroy --force
 
-delfargate: build
-	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(FARGATENAME) destroy --force
+delcluster: buildcluster
+	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(CLUSTERNAME) destroy --force
 
-delrds: build
-	docker run --rm -e AWS_PROFILE=$(AWSPROFILE) -v $(AWSDIR):/root/.aws $(RDSNAME) destroy --force
 
