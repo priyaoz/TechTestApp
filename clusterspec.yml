@@ -20,7 +20,7 @@ phases:
       # get the ARN for the RDS secret from the TTARDS stack
       - rdsarn=$(aws cloudformation describe-stack-resources --stack-name TTARDS --query 'StackResources[?ResourceType==`AWS::SecretsManager::Secret`].PhysicalResourceId' --output text)
       # inject it into another secret with only the password (and no JSON structure)
-      - (cd ../transferpw && python3 transferpw.py -R "${rdsarn}" -N VTT_PW && sh -x dbinit.sh)
+      - (cd ../transferpw && python3 transferpw.py -R "${rdsarn}" -N VTT_PW && sh dbinit.sh)
       -
       # - echo "and do the DB init, too: updatedb -s"
       - cdk deploy -e TTAFargate --strict --require-approval=never
