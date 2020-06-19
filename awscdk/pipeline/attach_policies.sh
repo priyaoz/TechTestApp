@@ -6,7 +6,7 @@
 
 # Find the role name by munging about with grep and awk. Wish there were wildcards :(
 
-pipeline_role=$(aws iam list-roles --output text | grep TTAPipeline-TTACluster | awk -F'/' '{print $2}' | awk '{print $1}')
+pipeline_role=$(aws iam list-roles --output text | grep PipelineApp-Cluster | awk -F'/' '{print $2}' | awk '{print $1}')
 
 
 echo "Attaching required roles to the Pipeline stack CodeBuild role ${pipeline_role}"

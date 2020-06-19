@@ -41,13 +41,13 @@ secret_arn = get_client(secretid=cluster_config['dbsecretname'])
 
 app = core.App()
 
-assignment_vpc = TTAVPC(app, 'TTAVPC',
+assignment_vpc = TTAVPC(app, 'VPCApp',
                         env=core.Environment(region=cluster_config['region'], account=cluster_config['accountid']),
                         cluster_config=cluster_config)
-assignment_rds = TTARDS(app, 'TTARDS',
+assignment_rds = TTARDS(app, 'RDSApp',
                         env=core.Environment(region=cluster_config['region'], account=cluster_config['accountid']),
                         vpc=assignment_vpc.vpc, cluster_config=cluster_config)
-assignment_fargate = TTAFargate(app, 'TTAFargate',
+assignment_fargate = TTAFargate(app, 'FargateApp',
                                 env=core.Environment(region=cluster_config['region'],
                                                      account=cluster_config['accountid']),
                                 dbendpoint=assignment_rds.endpoint, dbsecretarn=secret_arn,

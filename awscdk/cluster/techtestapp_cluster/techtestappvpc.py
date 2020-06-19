@@ -43,11 +43,11 @@ class TTAVPC(core.Stack):
                                name='DB',
                                cidr_mask=21
                            ),
-                           ec2.SubnetConfiguration(
-                               subnet_type=ec2.SubnetType.ISOLATED,
-                               name='OldDB',
-                               cidr_mask=21
-                           ),
+                           # ec2.SubnetConfiguration(
+                           #     subnet_type=ec2.SubnetType.ISOLATED,
+                           #     name='NAT',
+                           #     cidr_mask=21
+                           # ),
                            ec2.SubnetConfiguration(
                                subnet_type=ec2.SubnetType.PUBLIC,
                                name='Fargate',

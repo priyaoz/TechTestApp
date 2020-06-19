@@ -8,21 +8,21 @@
         "id": "Tree",
         "path": "Tree"
       },
-      "TTAPipeline": {
-        "id": "TTAPipeline",
-        "path": "TTAPipeline",
+      "PipelineApp": {
+        "id": "PipelineApp",
+        "path": "PipelineApp",
         "children": {
-          "TTAPipeline": {
-            "id": "TTAPipeline",
-            "path": "TTAPipeline/TTAPipeline",
+          "Pipeline": {
+            "id": "Pipeline",
+            "path": "PipelineApp/Pipeline",
             "children": {
               "ArtifactsBucketEncryptionKey": {
                 "id": "ArtifactsBucketEncryptionKey",
-                "path": "TTAPipeline/TTAPipeline/ArtifactsBucketEncryptionKey",
+                "path": "PipelineApp/Pipeline/ArtifactsBucketEncryptionKey",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "TTAPipeline/TTAPipeline/ArtifactsBucketEncryptionKey/Resource",
+                    "path": "PipelineApp/Pipeline/ArtifactsBucketEncryptionKey/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::KMS::Key",
                       "aws:cdk:cloudformation:props": {
@@ -75,7 +75,7 @@
                               "Principal": {
                                 "AWS": {
                                   "Fn::GetAtt": [
-                                    "TTAPipelineRole198F0063",
+                                    "PipelineRoleD68726F7",
                                     "Arn"
                                   ]
                                 }
@@ -94,7 +94,7 @@
                               "Principal": {
                                 "AWS": {
                                   "Fn::GetAtt": [
-                                    "TTABuildRole34841392",
+                                    "BuildProjectRoleAA92C755",
                                     "Arn"
                                   ]
                                 }
@@ -112,7 +112,44 @@
                               "Principal": {
                                 "AWS": {
                                   "Fn::GetAtt": [
-                                    "TTABuildRole34841392",
+                                    "BuildProjectRoleAA92C755",
+                                    "Arn"
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:DescribeKey",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::GetAtt": [
+                                    "ClusterProjectRole192AB2B4",
+                                    "Arn"
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::GetAtt": [
+                                    "ClusterProjectRole192AB2B4",
                                     "Arn"
                                   ]
                                 }
@@ -129,11 +166,11 @@
               },
               "ArtifactsBucket": {
                 "id": "ArtifactsBucket",
-                "path": "TTAPipeline/TTAPipeline/ArtifactsBucket",
+                "path": "PipelineApp/Pipeline/ArtifactsBucket",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "TTAPipeline/TTAPipeline/ArtifactsBucket/Resource",
+                    "path": "PipelineApp/Pipeline/ArtifactsBucket/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                       "aws:cdk:cloudformation:props": {
@@ -144,7 +181,7 @@
                                 "sseAlgorithm": "aws:kms",
                                 "kmsMasterKeyId": {
                                   "Fn::GetAtt": [
-                                    "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                    "PipelineArtifactsBucketEncryptionKey01D58D69",
                                     "Arn"
                                   ]
                                 }
@@ -163,24 +200,24 @@
                   },
                   "Notifications": {
                     "id": "Notifications",
-                    "path": "TTAPipeline/TTAPipeline/ArtifactsBucket/Notifications"
+                    "path": "PipelineApp/Pipeline/ArtifactsBucket/Notifications"
                   }
                 }
               },
               "ArtifactsBucketEncryptionKeyAlias": {
                 "id": "ArtifactsBucketEncryptionKeyAlias",
-                "path": "TTAPipeline/TTAPipeline/ArtifactsBucketEncryptionKeyAlias",
+                "path": "PipelineApp/Pipeline/ArtifactsBucketEncryptionKeyAlias",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "TTAPipeline/TTAPipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
+                    "path": "PipelineApp/Pipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
                       "aws:cdk:cloudformation:props": {
-                        "aliasName": "alias/codepipeline-ttapipelinea21ace39",
+                        "aliasName": "alias/codepipeline-pipelineapppipeline4bb58ccd",
                         "targetKeyId": {
                           "Fn::GetAtt": [
-                            "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                            "PipelineArtifactsBucketEncryptionKey01D58D69",
                             "Arn"
                           ]
                         }
@@ -191,11 +228,11 @@
               },
               "Role": {
                 "id": "Role",
-                "path": "TTAPipeline/TTAPipeline/Role",
+                "path": "PipelineApp/Pipeline/Role",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "TTAPipeline/TTAPipeline/Role/Resource",
+                    "path": "PipelineApp/Pipeline/Role/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -216,11 +253,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "TTAPipeline/TTAPipeline/Role/DefaultPolicy",
+                    "path": "PipelineApp/Pipeline/Role/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "TTAPipeline/TTAPipeline/Role/DefaultPolicy/Resource",
+                        "path": "PipelineApp/Pipeline/Role/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -239,7 +276,7 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "TTAPipelineArtifactsBucket69AD77DA",
+                                        "PipelineArtifactsBucket22248F97",
                                         "Arn"
                                       ]
                                     },
@@ -249,7 +286,7 @@
                                         [
                                           {
                                             "Fn::GetAtt": [
-                                              "TTAPipelineArtifactsBucket69AD77DA",
+                                              "PipelineArtifactsBucket22248F97",
                                               "Arn"
                                             ]
                                           },
@@ -270,7 +307,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                      "PipelineArtifactsBucketEncryptionKey01D58D69",
                                       "Arn"
                                     ]
                                   }
@@ -280,7 +317,17 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F",
+                                      "PipelineBuildStageBuildActionCodePipelineActionRole468D4659",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "PipelineClusterStageClusterActionCodePipelineActionRole9E8A081D",
                                       "Arn"
                                     ]
                                   }
@@ -288,10 +335,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "TTAPipelineRoleDefaultPolicy70BF59DE",
+                            "policyName": "PipelineRoleDefaultPolicyC7A05455",
                             "roles": [
                               {
-                                "Ref": "TTAPipelineRole198F0063"
+                                "Ref": "PipelineRoleD68726F7"
                               }
                             ]
                           }
@@ -303,25 +350,25 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "TTAPipeline/TTAPipeline/Resource",
+                "path": "PipelineApp/Pipeline/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
                   "aws:cdk:cloudformation:props": {
                     "roleArn": {
                       "Fn::GetAtt": [
-                        "TTAPipelineRole198F0063",
+                        "PipelineRoleD68726F7",
                         "Arn"
                       ]
                     },
                     "stages": [
                       {
-                        "name": "TTASource",
+                        "name": "SourceStage",
                         "actions": [
                           {
-                            "name": "Github_Source",
+                            "name": "GithubSource",
                             "outputArtifacts": [
                               {
-                                "name": "Artifact_TTASource_Github_Source"
+                                "name": "Artifact_SourceStage_GithubSource"
                               }
                             ],
                             "actionTypeId": {
@@ -342,18 +389,18 @@
                         ]
                       },
                       {
-                        "name": "TTABuild",
+                        "name": "BuildStage",
                         "actions": [
                           {
-                            "name": "CDK_Build",
+                            "name": "BuildAction",
                             "inputArtifacts": [
                               {
-                                "name": "Artifact_TTASource_Github_Source"
+                                "name": "Artifact_SourceStage_GithubSource"
                               }
                             ],
                             "outputArtifacts": [
                               {
-                                "name": "Artifact_TTABuild_CDK_Build"
+                                "name": "Artifact_BuildStage_BuildAction"
                               }
                             ],
                             "actionTypeId": {
@@ -364,13 +411,49 @@
                             },
                             "configuration": {
                               "ProjectName": {
-                                "Ref": "TTABuild3ED2D02B"
+                                "Ref": "BuildProject097C5DB7"
                               }
                             },
                             "runOrder": 1,
                             "roleArn": {
                               "Fn::GetAtt": [
-                                "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F",
+                                "PipelineBuildStageBuildActionCodePipelineActionRole468D4659",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "ClusterStage",
+                        "actions": [
+                          {
+                            "name": "ClusterAction",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_SourceStage_GithubSource"
+                              }
+                            ],
+                            "outputArtifacts": [
+                              {
+                                "name": "Artifact_ClusterStage_ClusterAction"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "ClusterProject7FF1A735"
+                              }
+                            },
+                            "runOrder": 1,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "PipelineClusterStageClusterActionCodePipelineActionRole9E8A081D",
                                 "Arn"
                               ]
                             }
@@ -381,13 +464,13 @@
                     "artifactStore": {
                       "type": "S3",
                       "location": {
-                        "Ref": "TTAPipelineArtifactsBucket69AD77DA"
+                        "Ref": "PipelineArtifactsBucket22248F97"
                       },
                       "encryptionKey": {
                         "type": "KMS",
                         "id": {
                           "Fn::GetAtt": [
-                            "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                            "PipelineArtifactsBucketEncryptionKey01D58D69",
                             "Arn"
                           ]
                         }
@@ -397,17 +480,17 @@
                   }
                 }
               },
-              "TTASource": {
-                "id": "TTASource",
-                "path": "TTAPipeline/TTAPipeline/TTASource",
+              "SourceStage": {
+                "id": "SourceStage",
+                "path": "PipelineApp/Pipeline/SourceStage",
                 "children": {
-                  "Github_Source": {
-                    "id": "Github_Source",
-                    "path": "TTAPipeline/TTAPipeline/TTASource/Github_Source",
+                  "GithubSource": {
+                    "id": "GithubSource",
+                    "path": "PipelineApp/Pipeline/SourceStage/GithubSource",
                     "children": {
                       "WebhookResource": {
                         "id": "WebhookResource",
-                        "path": "TTAPipeline/TTAPipeline/TTASource/Github_Source/WebhookResource",
+                        "path": "PipelineApp/Pipeline/SourceStage/GithubSource/WebhookResource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
                           "aws:cdk:cloudformation:props": {
@@ -421,9 +504,9 @@
                                 "matchEquals": "refs/heads/{Branch}"
                               }
                             ],
-                            "targetAction": "Github_Source",
+                            "targetAction": "GithubSource",
                             "targetPipeline": {
-                              "Ref": "TTAPipelineE1AE0FDF"
+                              "Ref": "PipelineC660917D"
                             },
                             "targetPipelineVersion": 1,
                             "registerWithThirdParty": true
@@ -434,21 +517,21 @@
                   }
                 }
               },
-              "TTABuild": {
-                "id": "TTABuild",
-                "path": "TTAPipeline/TTAPipeline/TTABuild",
+              "BuildStage": {
+                "id": "BuildStage",
+                "path": "PipelineApp/Pipeline/BuildStage",
                 "children": {
-                  "CDK_Build": {
-                    "id": "CDK_Build",
-                    "path": "TTAPipeline/TTAPipeline/TTABuild/CDK_Build",
+                  "BuildAction": {
+                    "id": "BuildAction",
+                    "path": "PipelineApp/Pipeline/BuildStage/BuildAction",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "TTAPipeline/TTAPipeline/TTABuild/CDK_Build/CodePipelineActionRole",
+                        "path": "PipelineApp/Pipeline/BuildStage/BuildAction/CodePipelineActionRole",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "TTAPipeline/TTAPipeline/TTABuild/CDK_Build/CodePipelineActionRole/Resource",
+                            "path": "PipelineApp/Pipeline/BuildStage/BuildAction/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -480,11 +563,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "TTAPipeline/TTAPipeline/TTABuild/CDK_Build/CodePipelineActionRole/DefaultPolicy",
+                            "path": "PipelineApp/Pipeline/BuildStage/BuildAction/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "TTAPipeline/TTAPipeline/TTABuild/CDK_Build/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "PipelineApp/Pipeline/BuildStage/BuildAction/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -499,7 +582,7 @@
                                           "Effect": "Allow",
                                           "Resource": {
                                             "Fn::GetAtt": [
-                                              "TTABuild3ED2D02B",
+                                              "BuildProject097C5DB7",
                                               "Arn"
                                             ]
                                           }
@@ -507,10 +590,100 @@
                                       ],
                                       "Version": "2012-10-17"
                                     },
-                                    "policyName": "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleDefaultPolicyBEA4B3C1",
+                                    "policyName": "PipelineBuildStageBuildActionCodePipelineActionRoleDefaultPolicy8BF12BA3",
                                     "roles": [
                                       {
-                                        "Ref": "TTAPipelineTTABuildCDKBuildCodePipelineActionRoleCAAAA87F"
+                                        "Ref": "PipelineBuildStageBuildActionCodePipelineActionRole468D4659"
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "ClusterStage": {
+                "id": "ClusterStage",
+                "path": "PipelineApp/Pipeline/ClusterStage",
+                "children": {
+                  "ClusterAction": {
+                    "id": "ClusterAction",
+                    "path": "PipelineApp/Pipeline/ClusterStage/ClusterAction",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "PipelineApp/Pipeline/ClusterStage/ClusterAction/CodePipelineActionRole",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "PipelineApp/Pipeline/ClusterStage/ClusterAction/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::102460195799:root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "PipelineApp/Pipeline/ClusterStage/ClusterAction/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "PipelineApp/Pipeline/ClusterStage/ClusterAction/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchGetBuilds",
+                                            "codebuild:StartBuild",
+                                            "codebuild:StopBuild"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "ClusterProject7FF1A735",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "PipelineClusterStageClusterActionCodePipelineActionRoleDefaultPolicy004F889E",
+                                    "roles": [
+                                      {
+                                        "Ref": "PipelineClusterStageClusterActionCodePipelineActionRole9E8A081D"
                                       }
                                     ]
                                   }
@@ -526,17 +699,17 @@
               }
             }
           },
-          "TTABuild": {
-            "id": "TTABuild",
-            "path": "TTAPipeline/TTABuild",
+          "BuildProject": {
+            "id": "BuildProject",
+            "path": "PipelineApp/BuildProject",
             "children": {
               "Role": {
                 "id": "Role",
-                "path": "TTAPipeline/TTABuild/Role",
+                "path": "PipelineApp/BuildProject/Role",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "TTAPipeline/TTABuild/Role/Resource",
+                    "path": "PipelineApp/BuildProject/Role/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -557,11 +730,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "TTAPipeline/TTABuild/Role/DefaultPolicy",
+                    "path": "PipelineApp/BuildProject/Role/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "TTAPipeline/TTABuild/Role/DefaultPolicy/Resource",
+                        "path": "PipelineApp/BuildProject/Role/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -585,7 +758,7 @@
                                           },
                                           ":logs:ap-southeast-2:102460195799:log-group:/aws/codebuild/",
                                           {
-                                            "Ref": "TTABuild3ED2D02B"
+                                            "Ref": "BuildProject097C5DB7"
                                           }
                                         ]
                                       ]
@@ -600,7 +773,7 @@
                                           },
                                           ":logs:ap-southeast-2:102460195799:log-group:/aws/codebuild/",
                                           {
-                                            "Ref": "TTABuild3ED2D02B"
+                                            "Ref": "BuildProject097C5DB7"
                                           },
                                           ":*"
                                         ]
@@ -626,7 +799,7 @@
                                         },
                                         ":codebuild:ap-southeast-2:102460195799:report-group/",
                                         {
-                                          "Ref": "TTABuild3ED2D02B"
+                                          "Ref": "BuildProject097C5DB7"
                                         },
                                         "-*"
                                       ]
@@ -690,7 +863,7 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "TTAPipelineArtifactsBucket69AD77DA",
+                                        "PipelineArtifactsBucket22248F97",
                                         "Arn"
                                       ]
                                     },
@@ -700,7 +873,7 @@
                                         [
                                           {
                                             "Fn::GetAtt": [
-                                              "TTAPipelineArtifactsBucket69AD77DA",
+                                              "PipelineArtifactsBucket22248F97",
                                               "Arn"
                                             ]
                                           },
@@ -721,7 +894,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                      "PipelineArtifactsBucketEncryptionKey01D58D69",
                                       "Arn"
                                     ]
                                   }
@@ -736,7 +909,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                                      "PipelineArtifactsBucketEncryptionKey01D58D69",
                                       "Arn"
                                     ]
                                   }
@@ -744,10 +917,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "TTABuildRoleDefaultPolicy3C7AA034",
+                            "policyName": "BuildProjectRoleDefaultPolicy3E9F248C",
                             "roles": [
                               {
-                                "Ref": "TTABuildRole34841392"
+                                "Ref": "BuildProjectRoleAA92C755"
                               }
                             ]
                           }
@@ -759,7 +932,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "TTAPipeline/TTABuild/Resource",
+                "path": "PipelineApp/BuildProject/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
                   "aws:cdk:cloudformation:props": {
@@ -768,7 +941,7 @@
                     },
                     "environment": {
                       "type": "LINUX_CONTAINER",
-                      "image": "aws/codebuild/standard:4.0",
+                      "image": "aws/codebuild/amazonlinux2-x86_64-standard:3.0",
                       "privilegedMode": true,
                       "computeType": "BUILD_GENERAL1_SMALL",
                       "environmentVariables": [
@@ -796,7 +969,7 @@
                     },
                     "serviceRole": {
                       "Fn::GetAtt": [
-                        "TTABuildRole34841392",
+                        "BuildProjectRoleAA92C755",
                         "Arn"
                       ]
                     },
@@ -806,7 +979,7 @@
                     },
                     "encryptionKey": {
                       "Fn::GetAtt": [
-                        "TTAPipelineArtifactsBucketEncryptionKeyE17CE55D",
+                        "PipelineArtifactsBucketEncryptionKey01D58D69",
                         "Arn"
                       ]
                     }
@@ -817,15 +990,250 @@
           },
           "TTAECRtechtestapp_ecr": {
             "id": "TTAECRtechtestapp_ecr",
-            "path": "TTAPipeline/TTAECRtechtestapp_ecr",
+            "path": "PipelineApp/TTAECRtechtestapp_ecr",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "TTAPipeline/TTAECRtechtestapp_ecr/Resource",
+                "path": "PipelineApp/TTAECRtechtestapp_ecr/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
                   "aws:cdk:cloudformation:props": {
                     "repositoryName": "techtestapp_ecr"
+                  }
+                }
+              }
+            }
+          },
+          "ClusterProject": {
+            "id": "ClusterProject",
+            "path": "PipelineApp/ClusterProject",
+            "children": {
+              "Role": {
+                "id": "Role",
+                "path": "PipelineApp/ClusterProject/Role",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "PipelineApp/ClusterProject/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codebuild.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "PipelineApp/ClusterProject/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "PipelineApp/ClusterProject/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "logs:CreateLogGroup",
+                                    "logs:CreateLogStream",
+                                    "logs:PutLogEvents"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":logs:ap-southeast-2:102460195799:log-group:/aws/codebuild/",
+                                          {
+                                            "Ref": "ClusterProject7FF1A735"
+                                          }
+                                        ]
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":logs:ap-southeast-2:102460195799:log-group:/aws/codebuild/",
+                                          {
+                                            "Ref": "ClusterProject7FF1A735"
+                                          },
+                                          ":*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "codebuild:CreateReportGroup",
+                                    "codebuild:CreateReport",
+                                    "codebuild:UpdateReport",
+                                    "codebuild:BatchPutTestCases"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":codebuild:ap-southeast-2:102460195799:report-group/",
+                                        {
+                                          "Ref": "ClusterProject7FF1A735"
+                                        },
+                                        "-*"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject*",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineArtifactsBucket22248F97",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "PipelineArtifactsBucket22248F97",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "PipelineArtifactsBucketEncryptionKey01D58D69",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "PipelineArtifactsBucketEncryptionKey01D58D69",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "ClusterProjectRoleDefaultPolicy86667622",
+                            "roles": [
+                              {
+                                "Ref": "ClusterProjectRole192AB2B4"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "PipelineApp/ClusterProject/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                  "aws:cdk:cloudformation:props": {
+                    "artifacts": {
+                      "type": "CODEPIPELINE"
+                    },
+                    "environment": {
+                      "type": "LINUX_CONTAINER",
+                      "image": "aws/codebuild/amazonlinux2-x86_64-standard:3.0",
+                      "privilegedMode": true,
+                      "computeType": "BUILD_GENERAL1_SMALL",
+                      "environmentVariables": [
+                        {
+                          "name": "AWS_ACCOUNT_ID",
+                          "type": "PLAINTEXT",
+                          "value": "102460195799"
+                        },
+                        {
+                          "name": "AWS_DEFAULT_REGION",
+                          "type": "PLAINTEXT",
+                          "value": "ap-southeast-2"
+                        }
+                      ]
+                    },
+                    "serviceRole": {
+                      "Fn::GetAtt": [
+                        "ClusterProjectRole192AB2B4",
+                        "Arn"
+                      ]
+                    },
+                    "source": {
+                      "type": "CODEPIPELINE",
+                      "buildSpec": "clusterspec.yml"
+                    },
+                    "encryptionKey": {
+                      "Fn::GetAtt": [
+                        "PipelineArtifactsBucketEncryptionKey01D58D69",
+                        "Arn"
+                      ]
+                    }
                   }
                 }
               }

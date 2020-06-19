@@ -8,7 +8,7 @@ pipeline_config = TTAPipeline.get_pipeline_config()
 
 app = core.App()
 
-TTAPipeline(app, 'TTAPipeline',
+TTAPipeline(app, 'PipelineApp',
             env=core.Environment(region=pipeline_config['region'], account=pipeline_config['accountid']),
             pipeline_config=pipeline_config)
 

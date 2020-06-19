@@ -38,11 +38,11 @@ class TTAFargate(core.Stack):
         :param dbendpoint: The DB endpoint FQDN
         :param clusterconfig: Config dict for configuration of RDS and Fargate clusters
         """
-        cluster = ecs.Cluster(self, "TTACluster", vpc=vpc)
+        cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
 
         # let's test this
         # secretarn = 'arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:DUMMY_PASSWORD-1z45re'
-        sec = sm.Secret.from_secret_arn(self, 'SEC', dbsecret)
+        sec = sm.Secret.from_secret_arn(self, 'SecretArn', dbsecret)
         repo = ecr.Repository.from_repository_name(self, "repo", repository_name=clusterconfig['ecrreponame'])
         ecs_patterns.ApplicationLoadBalancedFargateService(self, "FargateService",
                                                            cluster=cluster,

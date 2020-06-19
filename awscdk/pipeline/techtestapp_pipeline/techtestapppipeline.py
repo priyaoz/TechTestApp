@@ -25,21 +25,21 @@
 import toml
 from aws_cdk import \
     (
-    core,
-    aws_iam as iam,
-    aws_codebuild as codebuild,
-    aws_codedeploy as codedeploy,
-    aws_codepipeline as cpl,
-    aws_codepipeline_actions as cpactions,
-    aws_ecr as ecr,
-)
+        core,
+        aws_iam as iam,
+        aws_codebuild as codebuild,
+        aws_codedeploy as codedeploy,
+        aws_codepipeline as cpl,
+        aws_codepipeline_actions as cpactions,
+        aws_ecr as ecr,
+    )
 
 
 class TTAPipeline(core.Stack):
     def __init__(self, scope: core.Construct, id: str, *, pipeline_config, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        pipeline = cpl.Pipeline(self, "TTAPipeline", pipeline_name='TTAPipeline')
+        pipeline = cpl.Pipeline(self, "Pipeline", pipeline_name='TTAPipeline')
 
         githubtokenarn = f"arn:aws:secretsmanager:{pipeline_config['region']}:{pipeline_config['accountid']}:secret:{pipeline_config['githubtokenname']}"
         source_action, source_artifact = self._get_source(owner=pipeline_config['githubrepoowner'],
@@ -47,13 +47,13 @@ class TTAPipeline(core.Stack):
                                                           branch=pipeline_config['buildbranch'],
                                                           secmgrarn=githubtokenarn,
                                                           secmgrkey=pipeline_config['githubtokenkey'])
-        pipeline.add_stage(stage_name="TTASource", actions=[source_action])
+        pipeline.add_stage(stage_name="SourceStage", actions=[source_action])
 
         build_action, _ = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
-        pipeline.add_stage(stage_name="TTABuild", actions=[build_action])
+        pipeline.add_stage(stage_name="BuildStage", actions=[build_action])
 
         cluster_action, _ = self._get_cluster(sourceartifact=source_artifact, pipeline_config=pipeline_config)
-        pipeline.add_stage(stage_name="TTACluster", actions=[cluster_action])
+        pipeline.add_stage(stage_name="ClusterStage", actions=[cluster_action])
 
     def _get_source(self, *, owner, repo, branch='master', secmgrarn, secmgrkey):
         """
@@ -71,7 +71,7 @@ class TTAPipeline(core.Stack):
         """
         source_artifact = cpl.Artifact()
         source_action = cpactions.GitHubSourceAction(
-            action_name="Github_Source",
+            action_name="GithubSource",
             output=source_artifact,
             owner=owner,
             repo=repo,
@@ -95,7 +95,7 @@ class TTAPipeline(core.Stack):
         valid_app_ecrname = f"{pipeline_config['githubreponame'].lower()}_ecr"
         build_artifact = cpl.Artifact()
         build_spec = codebuild.BuildSpec.from_source_filename(buildspec)
-        build_project = codebuild.PipelineProject(self, "TTABuild",
+        build_project = codebuild.PipelineProject(self, "BuildProject",
                                                   build_spec=build_spec,
                                                   environment=codebuild.BuildEnvironment(
                                                       privileged=True,
@@ -114,7 +114,7 @@ class TTAPipeline(core.Stack):
                                                   }
                                                   )
         build_action = cpactions.CodeBuildAction(
-            action_name="CDK_Build",
+            action_name="BuildAction",
             project=build_project,
             input=sourceartifact,
             outputs=[build_artifact]
@@ -143,7 +143,7 @@ class TTAPipeline(core.Stack):
 
         build_artifact = cpl.Artifact()
         build_spec = codebuild.BuildSpec.from_source_filename(buildspec)
-        build_project = codebuild.PipelineProject(self, "TTACluster",
+        build_project = codebuild.PipelineProject(self, "ClusterProject",
                                                   build_spec=build_spec,
                                                   environment=codebuild.BuildEnvironment(
                                                       privileged=True,
@@ -158,7 +158,7 @@ class TTAPipeline(core.Stack):
                                                   }
                                                   )
         build_action = cpactions.CodeBuildAction(
-            action_name="CDK_Cluster",
+            action_name="ClusterAction",
             project=build_project,
             input=sourceartifact,
             outputs=[build_artifact]

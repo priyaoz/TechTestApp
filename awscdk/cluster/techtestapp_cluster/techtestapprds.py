@@ -47,7 +47,7 @@ class TTARDS(core.Stack):
                                  removal_policy=core.RemovalPolicy.DESTROY,
                                  # Probably want this in production or such
                                  # removal_policy=core.RemovalPolicy.RETAIN,
-                                 instance_props=rds.InstanceProps(vpc=vpc, vpc_subnets=ec2.SubnetType.PRIVATE,
+                                 instance_props=rds.InstanceProps(vpc=vpc, vpc_subnets=ec2.SubnetType.ISOLATED,
                                                                   instance_type=ec2.InstanceType.of(
                                                                       # aurora postgresql minimum requirements as per doco
                                                                       instance_class=ec2.InstanceClass.BURSTABLE3,
