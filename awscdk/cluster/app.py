@@ -3,6 +3,7 @@ import boto3
 import toml
 from aws_cdk import core
 from techtestapp_cluster.techtestappfargate import TTAFargate
+from techtestapp_cluster.techtestappeks import TTAEKS
 from techtestapp_cluster.techtestapprds import TTARDS
 from techtestapp_cluster.techtestappvpc import TTAVPC
 
@@ -53,6 +54,10 @@ assignment_fargate = TTAFargate(app, 'FargateApp',
                                 dbendpoint=assignment_rds.endpoint, dbsecretarn=secret_arn,
                                 vpc=assignment_vpc.vpc,
                                 cluster_config=cluster_config)
-
+assignment_eks = TTAEKS(app, 'EKSApp',
+                                env=core.Environment(region=cluster_config['region'],
+                                                     account=cluster_config['accountid']),
+                                vpc=assignment_vpc.vpc,
+                                cluster_config=cluster_config)
 app.synth()
 

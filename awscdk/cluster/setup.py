@@ -24,6 +24,7 @@ setuptools.setup(
         "aws-cdk.aws-ecs",
         "aws-cdk.aws-ecs-patterns",
         "aws-cdk.aws-rds",
+        "aws-cdk.aws-eks",
         "PyYAML",
         "setuptools",
         "jsii~=1.6.0",

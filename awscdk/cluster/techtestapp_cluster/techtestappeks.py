@@ -3,10 +3,10 @@
 # -*- coding: utf-8 -*-
 """
 
-.. module:: techtestapp_cluster.techtestappfargate.py
+.. module:: techtestapp_cluster.techtestappeks.py
     :platform: Unix
     :synopsis:
-        Create an AWS Fargate Cluster stack for the TechTestApp through the AWS CDK in Python.
+        Create an AWS EKS Cluster stack for the TechTestApp through the AWS CDK in Python.
 
 .. moduleauthor:: Michael Hoffmann <michaelh@centaur.id.au>
 
@@ -16,34 +16,37 @@ import toml
 from aws_cdk import \
     (
         core,
-        aws_ecs as ecs,
+        aws_ec2 as ec2,
+        aws_iam as iam,
+        aws_eks as eks,
         aws_ecr as ecr,
         aws_ecs_patterns as ecs_patterns,
-        aws_secretsmanager as sm
     )
 
 
-class TTAFargate(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, *, vpc, dbendpoint, dbsecretarn, cluster_config, **kwargs) -> None:
+class TTAEKS(core.Stack):
+    def __init__(self, scope: core.Construct, id: str, *, vpc, cluster_config, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.make_fargate(vpc=vpc, dbendpoint=dbendpoint, dbsecret=dbsecretarn, clusterconfig=cluster_config)
+        self.make_eks(vpc=vpc, clusterconfig=cluster_config)
 
-    def make_fargate(self, *, vpc, dbendpoint, dbsecret, clusterconfig):
+    def make_eks(self, *, vpc, clusterconfig):
         """
-        Create an ECS Fargate cluster in public subnets within VPC running the specified container.
+        Create an EKS cluster in public subnets within VPC
 
         :param vpc: The VPC
-        :param dbsecret: The DB secret object (NOT plaintext) stored in SecretManager
-        :param dbendpoint: The DB endpoint FQDN
         :param clusterconfig: Config dict for configuration of RDS and Fargate clusters
         """
-        cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
+        cluster_admin = iam.Role(self, 'AdminRole', assumed_by=iam.AccountRootPrincipal())
+        cluster = eks.Cluster(self, "EKSCluster",
+                              vpc=vpc,
+                              vpc_subnets=[ec2.SubnetType.PUBLIC],
+                              masters_role=cluster_admin,
+                              output_cluster_name=True
+                              )
 
-        # let's test this
-        # secretarn = 'arn:aws:secretsmanager:ap-southeast-2:102460195799:secret:DUMMY_PASSWORD-1z45re'
-        sec = sm.Secret.from_secret_arn(self, 'SecretArn', dbsecret)
         repo = ecr.Repository.from_repository_name(self, "repo", repository_name=clusterconfig['ecrreponame'])
+        '''
         ecs_patterns.ApplicationLoadBalancedFargateService(self, "FargateService",
                                                            cluster=cluster,
                                                            cpu=clusterconfig['containercpu'],
@@ -69,5 +72,6 @@ class TTAFargate(core.Stack):
                                                            ),
                                                            public_load_balancer=True,
                                                            assign_public_ip=True)
+        '''
         return cluster
 

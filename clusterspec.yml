@@ -2,7 +2,7 @@
 version: 0.2
 
 phases:
-  pre_build:
+  install:
     commands:
       - echo Installing CDK tools...
       - yum -y install nodejs npm
@@ -10,20 +10,26 @@ phases:
       - pip install --upgrade aws-cdk.core
       - cd awscdk/cluster
       - pip install -r requirements.txt
-      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+
+  pre_build:
+    commands:
+      - echo "Pre build commands"
+      # - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
 
   build:
     commands:
       - echo Build started on `date`
-      - cdk deploy -e TTAVPC --strict --require-approval=never
-      - cdk deploy -e TTARDS --strict --require-approval=never
+      - cdk deploy -e VPCApp --strict --require-approval=never
+      # - cdk deploy -e EKSApp --strict --require-approval=never
+      # Changes when moving to Kubernetes: we don't need to have the DB created right away at all!
+      # We just need VPC and EKS cluster, ready for a deployment - create the database as part of that
+      # - cdk deploy -e RDSApp --strict --require-approval=never
       # get the ARN for the RDS secret from the TTARDS stack
-      - rdsarn=$(aws cloudformation describe-stack-resources --stack-name TTARDS --query 'StackResources[?ResourceType==`AWS::SecretsManager::Secret`].PhysicalResourceId' --output text)
+      # - rdsarn=$(aws cloudformation describe-stack-resources --stack-name RDSApp --query 'StackResources[?ResourceType==`AWS::SecretsManager::Secret`].PhysicalResourceId' --output text)
       # inject it into another secret with only the password (and no JSON structure)
-      - (cd ../transferpw && python3 transferpw.py -R "${rdsarn}" -N VTT_PW && sh dbinit.sh)
-      -
+      # - (cd ../transferpw && python3 transferpw.py -R "${rdsarn}" -N VTT_PW && sh dbinit.sh)
       # - echo "and do the DB init, too: updatedb -s"
-      - cdk deploy -e TTAFargate --strict --require-approval=never
+      # - cdk deploy -e FargateApp --strict --require-approval=never
 
   post_build:
     commands:

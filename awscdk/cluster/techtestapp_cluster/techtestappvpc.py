@@ -8,7 +8,7 @@
     :synopsis:
         Create a new VPC for the TechTestApp through the AWS CDK in Python.
         Creates a public and an isolated subnet in each AZ, the former for
-        the Fargate cluster, the latter for RDS
+        the Fargate/EKS cluster, the latter for RDS
 
 .. moduleauthor:: Michael Hoffmann <michaelh@centaur.id.au>
 
@@ -39,18 +39,18 @@ class TTAVPC(core.Stack):
         return ec2.Vpc(self, 'VPC',
                        subnet_configuration=[
                            ec2.SubnetConfiguration(
-                               subnet_type=ec2.SubnetType.PRIVATE,
+                               subnet_type=ec2.SubnetType.ISOLATED,
                                name='DB',
                                cidr_mask=21
                            ),
                            # ec2.SubnetConfiguration(
-                           #     subnet_type=ec2.SubnetType.ISOLATED,
+                           #     subnet_type=ec2.SubnetType.PRIVATE,
                            #     name='NAT',
                            #     cidr_mask=21
                            # ),
                            ec2.SubnetConfiguration(
                                subnet_type=ec2.SubnetType.PUBLIC,
-                               name='Fargate',
+                               name='Cluster',
                                cidr_mask=21
                            )
                        ],
