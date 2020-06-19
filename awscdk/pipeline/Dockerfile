@@ -9,13 +9,12 @@ RUN \
     pip install --upgrade aws-cdk.core && \
     echo "CDK installed"
 
-COPY ./requirements.txt .
+COPY ./ .
 
 RUN \
     pip install -r requirements.txt && \
     echo "CDK stack dependencies installed"
 
-COPY ./ .
 
 VOLUME "/root/.aws"
 ENTRYPOINT ["cdk"]

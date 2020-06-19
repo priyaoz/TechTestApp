@@ -20,7 +20,7 @@ phases:
     commands:
       - echo Build started on `date`
       - cdk deploy -e VPCApp --strict --require-approval=never
-      # - cdk deploy -e EKSApp --strict --require-approval=never
+      - cdk deploy -e EKSApp --strict --require-approval=never
       # Changes when moving to Kubernetes: we don't need to have the DB created right away at all!
       # We just need VPC and EKS cluster, ready for a deployment - create the database as part of that
       # - cdk deploy -e RDSApp --strict --require-approval=never

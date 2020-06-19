@@ -49,8 +49,8 @@ class TTAPipeline(core.Stack):
                                                           secmgrkey=pipeline_config['githubtokenkey'])
         pipeline.add_stage(stage_name="SourceStage", actions=[source_action])
 
-        build_action, _ = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
-        pipeline.add_stage(stage_name="BuildStage", actions=[build_action])
+        # build_action, _ = self._get_build(sourceartifact=source_artifact, pipeline_config=pipeline_config)
+        # pipeline.add_stage(stage_name="BuildStage", actions=[build_action])
 
         cluster_action, _ = self._get_cluster(sourceartifact=source_artifact, pipeline_config=pipeline_config)
         pipeline.add_stage(stage_name="ClusterStage", actions=[cluster_action])
